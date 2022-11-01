@@ -15,6 +15,8 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/owners', 'OwnerController@index');
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

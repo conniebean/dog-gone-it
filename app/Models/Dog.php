@@ -16,4 +16,9 @@ class Dog extends Model
         'sex',
         'fixed'
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class);
+    }
 }

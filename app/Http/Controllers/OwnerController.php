@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Owner;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class OwnerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-
+        return Inertia::render('Owners/Index', [
+            'owners' => Owner::with('owner:id,name')->latest()->get(),
+        ]);
     }
 
     /**
