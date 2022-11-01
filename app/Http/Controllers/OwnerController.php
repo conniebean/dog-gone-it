@@ -14,7 +14,7 @@ class OwnerController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
