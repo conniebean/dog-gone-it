@@ -10,9 +10,7 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Owners/Index', [
-            'owners' => Owner::with('owner:id,name')->latest()->get(),
-        ]);
+        return(route(view('Owners/Index')));
     }
 
     /**

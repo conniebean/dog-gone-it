@@ -14,7 +14,7 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// TODO: figure out how to route this properly and also how to show a list in this page
 Route::get('/owners', 'OwnerController@index');
 
 Route::get('/', function () {
