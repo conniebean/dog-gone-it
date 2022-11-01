@@ -1,6 +1,5 @@
 <template>
-    <Owner>
-    </Owner>
+    <div>Hello World</div>
 </template>
 
 <script>

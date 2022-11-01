@@ -16,4 +16,9 @@ class Owner extends Model
         'email'
     ];
 
+    public function dogs()
+    {
+        return $this->hasMany(Dog::class);
+    }
+
 }

@@ -4,17 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Dog;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
+use Inertia\Inertia;
 
 class DogController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index()
     {
-        //
+        return Inertia::render('Dogs/Index', [
+            'dogs' => Dog::with('owner:id,name')->latest()->get(),
+        ]);
     }
 
     /**
@@ -31,11 +36,24 @@ class DogController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:30',
+            'breed' => 'required|string|max:50',
+            'sex' => [
+                'required',
+                Rule::in([Dog::GENDER['MALE'], Dog::GENDER['FEMALE']])
+            ],
+            'date_of_birth' => 'required|date',
+            'fixed' => 'required|boolean'
+        ]);
+
+        $request->owner()->dogs()->create($validated);
+
+        return redirect(route('dogs.index'));
     }
 
     /**

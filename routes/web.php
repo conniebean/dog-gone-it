@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DogController;
+use App\Http\Controllers\OwnerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,7 +17,8 @@ use Inertia\Inertia;
 |
 */
 // TODO: figure out how to route this properly and also how to show a list in this page
-Route::get('/owners', 'OwnerController@index');
+Route::resource('dogs', DogController::class)
+    ->only(['index', 'store']);
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -30,4 +33,4 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

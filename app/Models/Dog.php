@@ -9,6 +9,8 @@ class Dog extends Model
 {
     use HasFactory;
 
+    const GENDER = ['MALE', 'FEMALE'];
+
     protected $fillable = [
         'name',
         'date_of_birth',

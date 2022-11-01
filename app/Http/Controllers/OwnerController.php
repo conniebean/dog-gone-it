@@ -10,7 +10,7 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        return(route(view('Owners/Index')));
+        return Inertia::render('Owners/Index');
     }
 
     /**

@@ -1,16 +1,13 @@
 <script setup>
-    defineProps(['owners'])
+    defineProps(['owner']);
+    export default {
+        name: "Owner"
+    }
 </script>
 
 <template>
     <div>Hello World</div>
 </template>
-
-<script>
-export default {
-    name: "Owner"
-}
-</script>
 
 <style scoped>
 
