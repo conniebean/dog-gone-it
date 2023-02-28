@@ -17,9 +17,6 @@ class DogController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dogs/Index', [
-            'dogs' => Dog::with('owner:id,name')->latest()->get(),
-        ]);
     }
 
     /**
@@ -60,11 +57,13 @@ class DogController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Dog  $dog
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function show(Dog $dog)
+    public function show()
     {
-        //
+        return Inertia::render('Dogs/Index', [
+            'dogs' => Dog::all()
+        ]);
     }
 
     /**

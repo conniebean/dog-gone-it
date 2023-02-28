@@ -1,34 +1,49 @@
-<template>
-    <form @submit.prevent="form.post(route('dogs.store'), { onSuccess: () => form.reset() })">
-                <textarea
-                    v-model="form.message"
-                    placeholder="Enter a dog?"
-                    class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                ></textarea>
-        <InputError :message="form.errors.message" class="mt-2"/>
-        <PrimaryButton class="mt-4">Submit Dog</PrimaryButton>
-    </form>
-    <div>
-        <Dog
-            v-for="dog in dogs"
-            :key="dog.id"
-            :dog="dog"
-        />
-    </div>
-</template>
 
 <script setup>
-import Dog from '@/Components/Dog';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import {useForm} from "@inertiajs/inertia-vue3";
+import {Head} from "@inertiajs/inertia-vue3";
+import {computed} from "vue";
 
 defineProps(['dogs']);
 
 const form = useForm({
     message: '',
 });
+
+const currentYear = computed(() => {
+    const currentYear = new Date();
+    return currentYear.getFullYear() + "-" + currentYear.getMonth() + "-" + currentYear.getDay();
+});
 </script>
+
+<template>
+    <div>
+        <head><title>Dog</title></head>
+        <div v-for="a in dogs">
+            <table>
+                <colgroup>
+                    <col span="2">
+                </colgroup>
+                <tr>
+                    <td> </td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date Of Birth</th>
+                    <th scope="col">Sex</th>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{a.name}}</td>
+                    <td>{{(a.date_of_birth)}}</td>
+                    <td>{{a.sex}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</template>
+
 
 <style scoped>
 

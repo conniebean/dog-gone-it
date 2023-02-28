@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DogController;
 use App\Http\Controllers\OwnerController;
+use App\Models\Dog;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,21 +17,24 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// TODO: figure out how to route this properly and also how to show a list in this page
-Route::resource('dogs', DogController::class)
-    ->only(['index', 'store']);
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'name' => 'Connie',
+        'frameworks' => [
+            'Laravel', 'Vue', 'Inertia'
+        ]
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::inertia('/home', "Home")->middleware(['auth', 'verified']);
+//
+//Route::middleware(['auth', 'verified'])->group(function () {
+//    Route::get('/dogs', [DogController::class, 'show']);
+//});
+//
+//Route::get('/dashboard', function () {
+//    return Inertia::render('Dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
