@@ -19,7 +19,7 @@ class Owner extends Model
     protected $guarded = [];
     public function dogs(): HasMany
     {
-        return $this->hasMany(Dog::class);
+        return $this->hasMany(Dog::class, 'owner_id', 'id');
     }
 
 }

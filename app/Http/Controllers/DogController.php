@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dog;
+use App\Models\Owner;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
@@ -40,17 +41,13 @@ class DogController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:30',
             'breed' => 'required|string|max:50',
-            'sex' => [
-                'required',
-                Rule::in([Dog::GENDER['MALE'], Dog::GENDER['FEMALE']])
-            ],
+            'sex' => 'required',
+            'owner_id' => 'required|exists:owners,id',
             'date_of_birth' => 'required|date',
             'fixed' => 'required|boolean'
         ]);
 
-        $request->owner()->dogs()->create($validated);
-
-        return redirect(route('dogs.index'));
+        return Dog::create($validated);
     }
 
     /**

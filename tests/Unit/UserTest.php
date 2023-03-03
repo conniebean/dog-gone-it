@@ -11,6 +11,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
     use DatabaseTransactions;
+
     /** @test */
     public function an_employee_can_create_an_owner()
     {
@@ -40,11 +41,23 @@ class UserTest extends TestCase
     {
         $employee = User::factory()->create(['role_id' => 1]);
         $owner = Owner::factory()->create();
-        $dog = Dog::factory()->raw(['owner_id' => $owner->id]);
+        $dog = Dog::factory()->create(['owner_id' => $owner->id]);
 
-        $this->actingAs($employee)->post(route('owner/dog', $dog))->assertSuccessful();
+        $this->actingAs($employee)->post(route(
+            'owner.dog.store',
+            [
+                'name' => $dog->name,
+                'breed' => $dog->breed,
+                'sex' => $dog->sex,
+                'owner_id' => $owner->id,
+                'date_of_birth' => $dog->date_of_birth,
+                'fixed' => $dog->fixed
+            ]))
+            ->assertSuccessful();
 
-        $this->assertDatabaseHas('dogs', ['owner_id' => $dog->owner_id]);
+        $this->assertDatabaseHas('dogs', ['id' => $dog->id]);
+
+        $this->assertDatabaseHas('dogs', ['owner_id' => $dog['owner_id']]);
     }
 
     /** @test */
