@@ -11,13 +11,7 @@ class Dog extends Model
 
     const GENDER = ['MALE', 'FEMALE'];
 
-    protected $fillable = [
-        'name',
-        'date_of_birth',
-        'breed',
-        'sex',
-        'fixed'
-    ];
+    protected $guarded = [];
 
     public function owner()
     {

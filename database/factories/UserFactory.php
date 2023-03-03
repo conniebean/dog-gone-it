@@ -18,6 +18,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->email,
             'password' => $this->faker->password,
+            'role_id' => 1
         ];
     }
 }

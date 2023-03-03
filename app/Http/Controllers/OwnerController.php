@@ -31,7 +31,10 @@ class OwnerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'owner' => 'required'
+        ]);
+        return Owner::create($request->input('owner'));
     }
 
     /**
@@ -68,14 +71,9 @@ class OwnerController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Owner  $owner
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Owner $owner)
+    public function delete($id)
     {
-        //
+        $record = Owner::find($id);
+        $record->delete();
     }
 }
