@@ -30,6 +30,6 @@ class Dog extends Model
 
     public function owner(): BelongsTo
     {
-        return $this->belongsTo(Owner::class, 'owner_id', 'id');
+        return $this->belongsTo(Owner::class);
     }
 }

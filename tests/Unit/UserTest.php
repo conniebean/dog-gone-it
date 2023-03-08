@@ -55,9 +55,7 @@ class UserTest extends TestCase
             ]))
             ->assertSuccessful();
 
-        $this->assertDatabaseHas('dogs', ['id' => $dog->id]);
-
-        $this->assertDatabaseHas('dogs', ['owner_id' => $dog['owner_id']]);
+        $this->assertDatabaseHas('dogs', ['id' => $dog->id, 'owner_id' => $dog->owner_id]);
     }
 
     /** @test */
