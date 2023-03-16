@@ -28,11 +28,11 @@ Route::get('/', function () {
 });
 
 //Route::inertia('/home', "Home")->middleware(['auth', 'verified']);
-//
+
 //Route::middleware(['auth', 'verified'])->group(function () {
-//    Route::get('/dogs', [DogController::class, 'show']);
+    Route::get('/dogs', [DogController::class, 'show']);
 //});
-//
+
 //Route::get('/dashboard', function () {
 //    return Inertia::render('Dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');

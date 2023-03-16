@@ -14,15 +14,5 @@ class OwnerControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_it_can_create_an_owner()
-    {
-        $user = User::factory()->create();
-        $owner = new Owner(['id' => uniqid(), 'name' => 'Billy']);
 
-        $user->create($owner);
-
-        $expected = DB::table('owners')->where('name', 'billy');
-
-        dump($expected);exit;
-    }
 }

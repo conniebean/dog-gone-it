@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DogController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,9 @@ Route::prefix('owner')->group(function () {
     Route::post('store', OwnerController::class . '@store')->name('owner.store');
     Route::post('dog/store', DogController::class . '@store')->name('owner.dog.store');
     Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware('admin');
+});
+
+Route::prefix('employee')->group(function() {
+    Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
 });
 

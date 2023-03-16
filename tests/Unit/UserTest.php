@@ -71,4 +71,15 @@ class UserTest extends TestCase
 
         $this->assertDatabaseMissing('owners', $owner);
     }
+
+    /** @test */
+    public function an_admin_can_change_an_employee_to_an_admin()
+    {
+        $admin = User::factory()->create(['role_id' => 2]);
+        $employee = User::factory()->create(['role_id' => 1]);
+
+        $this->actingAs($admin)->put(route('employee.promote', $employee), ['id' => $employee->id])->assertSuccessful();
+
+        $this->assertEquals(2, $employee->fresh()->role_id);
+    }
 }
