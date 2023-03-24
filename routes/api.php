@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DaycareController;
 use App\Http\Controllers\DogController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\UserController;
@@ -30,5 +31,9 @@ Route::prefix('owner')->group(function () {
 
 Route::prefix('employee')->group(function() {
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
+});
+
+Route::prefix('daycare')->group(function(){
+    Route::post('store', DaycareController::class . '@store')->name('daycare.store');
 });
 

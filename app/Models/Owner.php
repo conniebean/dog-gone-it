@@ -10,12 +10,6 @@ class Owner extends Model
 {
     use HasFactory;
 
-//    protected $fillable = [
-//        'name',
-//        'address',
-//        'phone_number',
-//        'email'
-//    ];
     protected $guarded = [];
     public function dogs(): HasMany
     {
