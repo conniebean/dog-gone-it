@@ -39,13 +39,13 @@ class Dog extends Model
         return $this->hasMany(Vaccine::class);
     }
 
+    public function hasAllRequiredVaccines(): bool
+    {
+        return $this->vaccines()->where('required', true)-> count() === 3;
+    }
+
     public function isUpToDate(): bool
     {
-        $vaccineCount = Vaccine::where('dog_id', $this->id)
-            ->where('up_to_date', true)
-            ->count();
-
-        return $vaccineCount == $this->vaccines()->count()
-            && $this->vaccines()->where('up_to_date', false)->count() == 0;
+        return $this->vaccines()->where('up_to_date', false)->count() === 0 && $this->hasAllRequiredVaccines();
     }
 }

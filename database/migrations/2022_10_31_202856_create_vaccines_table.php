@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->date('expires');
             $table->boolean('up_to_date');
+            $table->boolean('required');
             $table->timestamps();
         });
     }

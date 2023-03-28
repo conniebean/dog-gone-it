@@ -51,11 +51,15 @@ class DaycareController extends Controller
             'daycare-date.after_or_equal' => 'Daycare-date must be today or a date in the future.'
         ]);
 
-        $upToDate = Vaccine::where('dog_id', $validated['dog_id'])->where('up_to_date', '!=', false)->get();
-        if($upToDate->isEmpty()){
-            abort(403, 'The vaccines for this pet are out of date! They cannot come to daycare.');
+        $dog = Dog::where('id', $validated['dog_id'])->first();
+        $alreadyInDaycare = Daycare::where('dog_id', $dog->id)->where('daycare-date',$validated['daycare-date'])->first();
+        if(!$dog->isUpToDate()){
+            abort(403, 'The vaccines for this pet are out of date, or they do not have
+                                        all the required vaccines! They cannot come to daycare.');
         }
-
+        if($alreadyInDaycare){
+            abort(403, 'Dog already in daycare for the day.');
+        }
 
         return Daycare::create($validated);
     }

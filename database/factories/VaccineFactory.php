@@ -26,7 +26,8 @@ class VaccineFactory extends Factory
             'dog_id' => $dogs->random()->id,
             'name' => $this->faker->randomElement(Vaccine::VACCINES),
             'expires' => $expires,
-            'up_to_date' => $upToDate
+            'up_to_date' => $upToDate,
+            'required' => true
         ];
     }
 }
