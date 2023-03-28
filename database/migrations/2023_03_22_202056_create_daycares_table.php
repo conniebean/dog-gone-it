@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('dog_id')->constrained();
             $table->string('visit-type');
             $table->boolean('paid');
-            $table->dateTime('check-in')->default(null);
-            $table->dateTime('check-out')->default(null);
+            $table->dateTime('check-in')->nullable();
+            $table->dateTime('check-out')->nullable();
             $table->date('daycare-date');
             $table->timestamps();
         });

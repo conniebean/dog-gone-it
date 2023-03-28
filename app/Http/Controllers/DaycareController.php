@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Daycare;
+use App\Models\Dog;
+use App\Models\Vaccine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PHPUnit\Util\Exception;
@@ -48,6 +50,12 @@ class DaycareController extends Controller
         [
             'daycare-date.after_or_equal' => 'Daycare-date must be today or a date in the future.'
         ]);
+
+        $upToDate = Vaccine::where('dog_id', $validated['dog_id'])->where('up_to_date', '!=', false)->get();
+        if($upToDate->isEmpty()){
+            abort(403, 'The vaccines for this pet are out of date! They cannot come to daycare.');
+        }
+
 
         return Daycare::create($validated);
     }

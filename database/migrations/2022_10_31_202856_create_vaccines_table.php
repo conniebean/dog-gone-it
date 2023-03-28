@@ -16,9 +16,8 @@ return new class extends Migration
         Schema::create('vaccines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dog_id')->constrained();
-            $table->date('rabies');
-            $table->date('da2pp');
-            $table->date('bordatella');
+            $table->string('name');
+            $table->date('expires');
             $table->boolean('up_to_date');
             $table->timestamps();
         });
