@@ -24,10 +24,18 @@ class VaccineFactory extends Factory
         $upToDate = $expires >= now()->format('Y-m-d');
         return [
             'dog_id' => $dogs->random()->id,
-            'name' => $this->faker->randomElement(Vaccine::VACCINES),
+            'name' => 'LEPTO',
             'expires' => $expires,
             'up_to_date' => $upToDate,
-            'required' => true
+            'required' => false
         ];
+    }
+
+    public function required(string $vaccine): Factory
+    {
+        return $this->state(fn(array $attributes) => [
+            'name' => $vaccine,
+            'required' => true
+        ]);
     }
 }

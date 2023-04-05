@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('vaccines', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->date('expires');
-            $table->boolean('up_to_date');
-            $table->boolean('required')->default(false);
+        Schema::create('dog_vaccines', function (Blueprint $table){
+            $table->unsignedBigInteger('vaccine_id');
+            $table->unsignedBigInteger('dog_id');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vaccines');
+        //
     }
 };

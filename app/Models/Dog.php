@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 class Dog extends Model
 {
@@ -39,9 +40,13 @@ class Dog extends Model
         return $this->hasMany(Vaccine::class);
     }
 
-    public function hasAllRequiredVaccines(): bool
+    public function scopeHasAllRequiredVaccines($query): bool
     {
-        return $this->vaccines()->where('required', true)-> count() === 3;
+        //require vaccines in Vaccine class [rabies, bordetella, da2pp]
+        $requiredVaccines = Vaccine::where('required', true)->pluck('name')->toArray();
+        $receivedVaccines = $this->vaccines()->whereIn('name', $requiredVaccines)->pluck('name')->toArray();
+
+        return empty(array_diff($requiredVaccines, $receivedVaccines));
     }
 
     public function isUpToDate(): bool

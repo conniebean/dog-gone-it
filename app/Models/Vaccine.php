@@ -10,10 +10,10 @@ class Vaccine extends Model
 {
     use HasFactory;
 
-    public const VACCINES = [
-        'rabies' => 'RABIES',
-        'da2pp' => 'DA2PP',
-        'bordetella' => 'BORDETELLA'
+    public const REQUIRED_VACCINES = [
+        'RABIES' => 'RABIES',
+        'DA2PP' => 'DA2PP',
+        'BORDETELLA' => 'BORDETELLA'
     ];
 
     protected $guarded = [];
