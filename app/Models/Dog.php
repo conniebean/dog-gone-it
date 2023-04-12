@@ -38,16 +38,16 @@ class Dog extends Model
         return $this->belongsToMany(Vaccine::class)->withPivot([]);
     }
 
-    public function scopeHasAllRequiredVaccines($query): bool
+    public function hasAllRequiredVaccines(): bool
     {
-        $requiredVaccines = DogVaccine::where('required', true)->pluck('id')->toArray();
+        $requiredVaccines = Vaccine::where('required', true)->pluck('id')->toArray();
         $receivedVaccines = $this->vaccines()->whereIn('id', $requiredVaccines)->pluck('id')->toArray();
         return empty(array_diff($requiredVaccines, $receivedVaccines));
     }
 
     public function isUpToDate(): bool
     {
-        // TODO: scope isn't working since we changed things. Have to investigate.
-        return $this->vaccines()->where('up_to_date', false)->count() === 0 && $this->hasAllRequiredVaccines();
+        return $this->vaccines()->where('up_to_date', false)->count() === 0
+            && $this->hasAllRequiredVaccines();
     }
 }

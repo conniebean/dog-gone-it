@@ -10,6 +10,8 @@ class DogVaccine extends Model
 {
     use HasFactory;
 
+    protected $table = 'dog_vaccine';
+
     public function dog(): BelongsTo
     {
         return $this->belongsTo(Dog::class, 'dog_id', 'id');

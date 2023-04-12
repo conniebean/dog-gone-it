@@ -24,20 +24,14 @@ class DaycareControllerTest extends TestCase
         $this->owner = Owner::factory()->create();
         $this->dog = Dog::factory()
             ->for($this->owner)
-            ->hasAttached(Vaccine::factory(3)
-                ->sequence(
-                    ['name' => Vaccine::REQUIRED_VACCINES['RABIES']],
-                    ['name' => Vaccine::REQUIRED_VACCINES['DA2PP']],
-                    ['name' => Vaccine::REQUIRED_VACCINES['BORDETELLA']],
-                )->create())
+            ->hasAttached(Vaccine::where('required', 1)->get())
             ->create();
+        $this->dog->vaccines()->update(['up_to_date' => 1]);
     }
 
     /** @test */
     public function it_can_add_a_dog_to_the_daycare()
     {
-        $this->vaccinesUpToDate();
-
         $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
@@ -46,8 +40,6 @@ class DaycareControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
-        $this->vaccinesUpToDate();
-
         $this->postToDaycare($this->time->subDay()->toDateString(), $this->dog)->assertInvalid();
 
         $this->assertDatabaseMissing('daycare', ['dog_id' => $this->dog->id]);
@@ -56,17 +48,22 @@ class DaycareControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_daycare_with_expired_vaccines()
     {
-        $this->vaccinesUpToDate(false);
+        $dogWithoutUpToDateVaccines = Dog::factory()
+            ->for($this->owner)
+            ->hasAttached(Vaccine::where('required', 1)->get())
+            ->create();
+        $dogWithoutUpToDateVaccines->vaccines()->update(['up_to_date' => 0]);
 
-        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertForbidden();
+        $this->postToDaycare($this->time->subDay()->toDateString(), $dogWithoutUpToDateVaccines)->assertInvalid();
+
+        $this->assertDatabaseMissing('daycare', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
     }
+
 
     /** @test */
     public function it_cannot_add_a_dog_more_than_once_on_the_same_day()
     {
-        $this->vaccinesUpToDate();
-
-        $this->postToDaycare($this->time->toDateString(),$this->dog)->assertSuccessful();
+        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
 
