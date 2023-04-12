@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Daycare;
 use App\Models\Dog;
-use App\Models\Vaccine;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PHPUnit\Util\Exception;
 
 class DaycareController extends Controller
 {
@@ -52,13 +49,16 @@ class DaycareController extends Controller
         ]);
 
         $dog = Dog::where('id', $validated['dog_id'])->first();
-        $alreadyInDaycare = Daycare::where('dog_id', $dog->id)->where('daycare-date',$validated['daycare-date'])->first();
+        $alreadyInDaycare = Daycare::where('dog_id', $dog->id)->where('daycare-date', $validated['daycare-date'])->first();
+
         if(!$dog->isUpToDate()){
-            abort(403, 'The vaccines for this pet are out of date, or they do not have
-                                        all the required vaccines! They cannot come to daycare.');
+            abort(403, 'The vaccines for this pet are out of date, or they do not have all the required vaccines! They cannot come to daycare.');
         }
         if($alreadyInDaycare){
             abort(403, 'Dog already in daycare for the day.');
+        }
+        if(Daycare::maxReached($validated['daycare-date'])){
+            abort(403, 'Daycare is full for this date. Please choose another day to visit.');
         }
 
         return Daycare::create($validated);

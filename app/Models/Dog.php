@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Arr;
 
 class Dog extends Model
 {
@@ -35,22 +33,21 @@ class Dog extends Model
         return $this->belongsTo(Owner::class);
     }
 
-    public function vaccines(): HasMany
+    public function vaccines(): BelongsToMany
     {
-        return $this->hasMany(Vaccine::class);
+        return $this->belongsToMany(Vaccine::class)->withPivot([]);
     }
 
     public function scopeHasAllRequiredVaccines($query): bool
     {
-        //require vaccines in Vaccine class [rabies, bordetella, da2pp]
-        $requiredVaccines = Vaccine::where('required', true)->pluck('name')->toArray();
-        $receivedVaccines = $this->vaccines()->whereIn('name', $requiredVaccines)->pluck('name')->toArray();
-
+        $requiredVaccines = DogVaccine::where('required', true)->pluck('id')->toArray();
+        $receivedVaccines = $this->vaccines()->whereIn('id', $requiredVaccines)->pluck('id')->toArray();
         return empty(array_diff($requiredVaccines, $receivedVaccines));
     }
 
     public function isUpToDate(): bool
     {
+        // TODO: scope isn't working since we changed things. Have to investigate.
         return $this->vaccines()->where('up_to_date', false)->count() === 0 && $this->hasAllRequiredVaccines();
     }
 }

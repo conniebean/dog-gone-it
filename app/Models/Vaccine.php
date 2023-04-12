@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Vaccine extends Model
 {
@@ -18,8 +18,8 @@ class Vaccine extends Model
 
     protected $guarded = [];
 
-    public function dog(): BelongsTo
+    public function dogs(): BelongsToMany
     {
-        return $this->belongsTo(Dog::class);
+        return $this->belongsToMany(Dog::class);
     }
 }

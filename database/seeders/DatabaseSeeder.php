@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         (new UserSeeder())->run();
         (new OwnerSeeder())->run();
         (new DogSeeder())->run();
+        (new VaccineSeeder())->run();
     }
 }

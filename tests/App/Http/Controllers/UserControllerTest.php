@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Dog;
 use App\Models\Owner;
 use App\Models\User;
+use App\Models\Vaccine;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -42,7 +43,14 @@ class UserControllerTest extends TestCase
     {
         $employee = User::factory()->create();
         $owner = Owner::factory()->create();
-        $dog = Dog::factory()->create(['owner_id' => $owner->id]);
+        $dog = Dog::factory()
+            ->hasAttached(Vaccine::factory(3)
+                ->sequence(
+                   ['name' => Vaccine::REQUIRED_VACCINES['RABIES']],
+                   ['name' => Vaccine::REQUIRED_VACCINES['DA2PP']],
+                   ['name' => Vaccine::REQUIRED_VACCINES['BORDETELLA']],
+                )->create())
+            ->create(['owner_id' => $owner->id]);
 
         $this->actingAs($employee)->post(route(
             'owner.dog.store',

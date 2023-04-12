@@ -2,6 +2,7 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\Models\Daycare;
 use App\Models\Dog;
 use App\Models\Owner;
 use App\Models\User;
@@ -15,15 +16,21 @@ class DaycareControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->time = Carbon::now();
         $this->employee = User::factory()->create();
         $this->owner = Owner::factory()->create();
-        $this->dog = Dog::factory()->create(['owner_id' => $this->owner->id]);
+        $this->dog = Dog::factory()
+            ->for($this->owner)
+            ->hasAttached(Vaccine::factory(3)
+                ->sequence(
+                    ['name' => Vaccine::REQUIRED_VACCINES['RABIES']],
+                    ['name' => Vaccine::REQUIRED_VACCINES['DA2PP']],
+                    ['name' => Vaccine::REQUIRED_VACCINES['BORDETELLA']],
+                )->create())
+            ->create();
     }
 
     /** @test */
@@ -31,7 +38,7 @@ class DaycareControllerTest extends TestCase
     {
         $this->vaccinesUpToDate();
 
-        $this->postToDaycare($this->time->toDateString())->assertSuccessful();
+        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
     }
@@ -41,7 +48,7 @@ class DaycareControllerTest extends TestCase
     {
         $this->vaccinesUpToDate();
 
-        $this->postToDaycare($this->time->subDay()->toDateString())->assertInvalid();
+        $this->postToDaycare($this->time->subDay()->toDateString(), $this->dog)->assertInvalid();
 
         $this->assertDatabaseMissing('daycare', ['dog_id' => $this->dog->id]);
     }
@@ -51,7 +58,7 @@ class DaycareControllerTest extends TestCase
     {
         $this->vaccinesUpToDate(false);
 
-        $this->postToDaycare($this->time->toDateString())->assertForbidden();
+        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertForbidden();
     }
 
     /** @test */
@@ -59,35 +66,41 @@ class DaycareControllerTest extends TestCase
     {
         $this->vaccinesUpToDate();
 
-        $this->postToDaycare($this->time->toDateString())->assertSuccessful();
+        $this->postToDaycare($this->time->toDateString(),$this->dog)->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
 
-        $this->postToDaycare($this->time->toDateString())->assertForbidden();
+        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertForbidden();
     }
 
-    /**@test */
+    /** @test */
     public function it_cannot_add_a_dog_if_they_do_not_have_all_required_vaccines()
     {
+        $newDog = Dog::factory()->create();
+        $newDog->vaccines()->attach(Vaccine::where('required', 1)->first());
 
+        $this->assertEquals(false, $newDog->hasAllRequiredVaccines());
     }
 
-    /**@test */
+    /** @test */
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
+        Daycare::factory(20)->create(['daycare-date' => $this->time->toDateString()]);
+        $newDog = Dog::factory()->create(['owner_id' => $this->owner]);
 
+        $this->postToDaycare($this->time->toDateString(), $newDog)->assertForbidden();
     }
 
-    public function vaccinesUpToDate(bool $value = true)
+    public function vaccinesUpToDate()
     {
-        return Vaccine::factory(3)->for($this->dog)->create(['up_to_date' => $value]);
+        return $this->dog->hasAllRequiredVaccines();
     }
 
-    public function postToDaycare($time): TestResponse
+    public function postToDaycare($time, $dog): TestResponse
     {
         return $this->actingAs($this->employee)->post(
             route('daycare.store', [
-                'dog_id' => $this->dog->id,
+                'dog_id' => $dog,
                 'visit-type' => 'full-day',
                 'paid' => false,
                 'daycare-date' => $time

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dog_vaccines', function (Blueprint $table){
+        Schema::create('dog_vaccine', function (Blueprint $table){
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('dog_id');
             $table->timestamps();

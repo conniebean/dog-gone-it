@@ -18,12 +18,9 @@ class VaccineFactory extends Factory
      */
     public function definition()
     {
-        $dogs = Dog::all();
-
         $expires = $this->faker->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d');
         $upToDate = $expires >= now()->format('Y-m-d');
         return [
-            'dog_id' => $dogs->random()->id,
             'name' => 'LEPTO',
             'expires' => $expires,
             'up_to_date' => $upToDate,
