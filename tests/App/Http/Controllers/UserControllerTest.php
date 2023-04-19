@@ -28,7 +28,7 @@ class UserControllerTest extends TestCase
     public function an_employee_can_not_remove_an_owner()
     {
         $employee = User::factory()->create();
-        $owner = Owner::factory()->raw();
+        $owner = Owner::factory()->raw(['id' => 1234]);
         $this->actingAs($employee)->post(route('owner.store'), ['owner' => $owner])->assertSuccessful();
 
         $this->assertDatabaseHas('owners', $owner);
@@ -71,7 +71,7 @@ class UserControllerTest extends TestCase
     public function an_admin_can_remove_an_owner()
     {
         $admin = User::factory()->create(['role_id' => 2]);
-        $owner = Owner::factory()->raw();
+        $owner = Owner::factory()->raw(['id' => 1234]);
         $this->actingAs($admin)->post(route('owner.store'), ['owner' => $owner])->assertSuccessful();
 
         $this->assertDatabaseHas('owners', $owner);

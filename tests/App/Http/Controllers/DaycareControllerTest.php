@@ -35,6 +35,8 @@ class DaycareControllerTest extends TestCase
         $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
+
+        //TODO: dispatch confirmation email to owner
     }
 
     /** @test */

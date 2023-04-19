@@ -26,6 +26,7 @@ class Dog extends Model
         'Golden Retriever'
     ];
 
+    // TODO: add a 'notes' table that relates to the dogs
     protected $guarded = [];
 
     public function owner(): BelongsTo
