@@ -30,7 +30,7 @@ class Service extends Model
         return $this->belongsToMany(Appointment::class);
     }
 
-    public function servicable(): MorphTo
+    public function serviceable(): MorphTo
     {
         return $this->morphTo();
     }
