@@ -18,7 +18,6 @@ class OwnerRepositoryTest extends TestCase
     {
         parent::setUp();
         $this->owner = new Owner([
-            'id' => 'someId',
             'name' => 'Jane Doe',
             'address' => '123 Fake Street',
             'email' => 'email@email.com',
