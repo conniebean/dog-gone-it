@@ -28,8 +28,6 @@ class DogControllerTest extends TestCase
     /** @test */
     public function an_employee_can_add_a_dog_to_an_owner()
     {
-
-
         $this->actingAs($this->employee)->post(route(
             'dog.store', ['ownerId' => $this->owner->id]),
             [

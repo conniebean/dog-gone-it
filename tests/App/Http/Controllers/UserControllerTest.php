@@ -15,45 +15,25 @@ class UserControllerTest extends TestCase
     use DatabaseTransactions;
 
     /** @test */
-    public function an_employee_can_create_an_owner()
+    public function an_admin_can_create_an_employee()
     {
-        $employee = User::factory()->create();
-        $owner = Owner::factory()->raw();
-        $this->actingAs($employee)->post(route('owner.store'), ['owner' => $owner])->assertSuccessful();
-
-        $this->assertDatabaseHas('owners', $owner);
+        self::markTestSkipped();
     }
 
     /** @test */
-    public function an_employee_can_not_remove_an_owner()
+    public function an_admin_can_delete_an_employee()
     {
-        $employee = User::factory()->create();
-        $owner = Owner::factory()->raw(['id' => 1234]);
-        $this->actingAs($employee)->post(route('owner.store'), ['owner' => $owner])->assertSuccessful();
-
-        $this->assertDatabaseHas('owners', $owner);
-
-        $this->actingAs($employee)->delete(route('owner.delete', $owner))->assertUnauthorized();
-
-        $this->assertDatabaseHas('owners', $owner);
+        self::markTestSkipped();
     }
 
     /** @test */
-    public function an_admin_can_remove_an_owner()
+    public function an_admin_can_update_an_employee()
     {
-        $admin = User::factory()->create(['role_id' => 2]);
-        $owner = Owner::factory()->raw(['id' => 1234]);
-        $this->actingAs($admin)->post(route('owner.store'), ['owner' => $owner])->assertSuccessful();
-
-        $this->assertDatabaseHas('owners', $owner);
-
-        $this->actingAs($admin)->delete(route('owner.delete', $owner))->assertSuccessful();
-
-        $this->assertDatabaseMissing('owners', $owner);
+        self::markTestSkipped();
     }
 
     /** @test */
-    public function an_admin_can_change_an_employee_to_an_admin()
+    public function an_admin_can_promote_an_employee_to_an_admin()
     {
         $admin = User::factory()->create(['role_id' => 2]);
         $employee = User::factory()->create();

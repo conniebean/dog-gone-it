@@ -78,6 +78,7 @@ class DaycareControllerTest extends TestCase
         $newDog = Dog::factory()->create();
         $newDog->vaccines()->attach(Vaccine::where('required', 1)->first());
 
+        $this->postToDaycare($this->time->toDateString(), $newDog)->assertForbidden();
         $this->assertEquals(false, $newDog->hasAllRequiredVaccines());
     }
 
