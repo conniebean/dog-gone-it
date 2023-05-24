@@ -20,7 +20,7 @@ class DogController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $ownerId)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:30',
@@ -76,8 +76,11 @@ class DogController extends Controller
      * @param  \App\Models\Dog  $dog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dog $dog)
+    public function delete($ownerId, $dogId)
     {
-        //
+        $owner = Owner::findOrFail($ownerId);
+        $dog = $owner->dogs()->findOrFail($dogId);
+
+        $dog->delete();
     }
 }

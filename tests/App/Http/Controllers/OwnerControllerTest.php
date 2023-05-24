@@ -14,5 +14,4 @@ class OwnerControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-
 }

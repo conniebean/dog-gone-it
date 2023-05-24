@@ -25,8 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('owner')->group(function () {
     Route::get('index', OwnerController::class . '@index')->name('owner.index');
     Route::post('store', OwnerController::class . '@store')->name('owner.store');
-    Route::post('dog/store', DogController::class . '@store')->name('owner.dog.store');
     Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware('admin');
+    Route::delete('{id}/dogs/{dogId}', DogController::class . '@delete')->name('dog.delete');
+});
+
+Route::prefix('dog')->group(function (){
+    Route::post('store/{ownerId}', DogController::class . '@store')->name('dog.store');
 });
 
 Route::prefix('employee')->group(function() {

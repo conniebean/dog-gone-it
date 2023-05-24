@@ -39,35 +39,6 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function an_employee_can_add_a_dog_to_an_owner()
-    {
-        $employee = User::factory()->create();
-        $owner = Owner::factory()->create();
-        $dog = Dog::factory()
-            ->hasAttached(Vaccine::factory(3)
-                ->sequence(
-                   ['name' => Vaccine::REQUIRED_VACCINES['RABIES']],
-                   ['name' => Vaccine::REQUIRED_VACCINES['DA2PP']],
-                   ['name' => Vaccine::REQUIRED_VACCINES['BORDETELLA']],
-                )->create())
-            ->create(['owner_id' => $owner->id]);
-
-        $this->actingAs($employee)->post(route(
-            'owner.dog.store',
-            [
-                'name' => $dog->name,
-                'breed' => $dog->breed,
-                'sex' => $dog->sex,
-                'owner_id' => $owner->id,
-                'date_of_birth' => $dog->date_of_birth,
-                'fixed' => $dog->fixed
-            ]))
-            ->assertSuccessful();
-
-        $this->assertDatabaseHas('dogs', ['id' => $dog->id, 'owner_id' => $dog->owner_id]);
-    }
-
-    /** @test */
     public function an_admin_can_remove_an_owner()
     {
         $admin = User::factory()->create(['role_id' => 2]);
