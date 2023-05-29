@@ -34,6 +34,7 @@ Route::prefix('dog')->group(function (){
 });
 
 Route::prefix('employee')->group(function() {
+    Route::post('create', UserController::class . '@store')->name('employee.create')->middleware('admin');
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
 });
 

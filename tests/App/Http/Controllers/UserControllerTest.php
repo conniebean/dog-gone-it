@@ -14,10 +14,39 @@ class UserControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->admin = User::factory()->create(['role_id' => 2]);
+        $this->employee = User::factory()->create();
+
+    }
+
     /** @test */
     public function an_admin_can_create_an_employee()
     {
-        self::markTestSkipped();
+        $this->actingAs($this->admin)->post(route('employee.create'), [
+            'name' => 'Connie Kennedy',
+            'email' => 'connie.kennedy@test.com',
+            'password' => 'password',
+            'role_id' => 1
+        ])->assertSuccessful();
+
+        $this->assertDatabaseHas('users', ['id' => $this->employee->id]);
+    }
+
+    /** @test */
+    public function an_employee_cannot_create_an_employee()
+    {
+        $this->actingAs($this->employee)->post(route('employee.create'), [
+            'id' => 'someId',
+            'name' => 'Connie Kennedy',
+            'email' => 'connie.kennedy@test.com',
+            'password' => 'password',
+            'role_id' => 1
+        ])->assertUnauthorized();
+
+        $this->assertDatabaseMissing('users', ['id' => 'someId']);
     }
 
     /** @test */
@@ -35,11 +64,8 @@ class UserControllerTest extends TestCase
     /** @test */
     public function an_admin_can_promote_an_employee_to_an_admin()
     {
-        $admin = User::factory()->create(['role_id' => 2]);
-        $employee = User::factory()->create();
+        $this->actingAs($this->admin)->put(route('employee.promote', $this->employee), ['id' => $this->employee->id])->assertSuccessful();
 
-        $this->actingAs($admin)->put(route('employee.promote', $employee), ['id' => $employee->id])->assertSuccessful();
-
-        $this->assertEquals(2, $employee->fresh()->role_id);
+        $this->assertEquals(2, $this->employee->fresh()->role_id);
     }
 }
