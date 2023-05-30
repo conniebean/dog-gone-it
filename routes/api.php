@@ -35,6 +35,7 @@ Route::prefix('dog')->group(function (){
 
 Route::prefix('employee')->group(function() {
     Route::post('create', UserController::class . '@store')->name('employee.create')->middleware('admin');
+    Route::put('update/{id}', UserController::class . '@update')->name('employee.update')->middleware('admin');
     Route::delete('delete/{userId}', UserController::class . '@delete')->name('employee.delete')->middleware('admin');
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
 });

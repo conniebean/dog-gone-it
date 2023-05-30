@@ -75,7 +75,23 @@ class UserControllerTest extends TestCase
     /** @test */
     public function an_admin_can_update_an_employee()
     {
-        self::markTestSkipped();
+        $this->withoutExceptionHandling();
+        $originalEmployee = User::factory()->create([
+            'name' => 'original name'
+        ]);
+
+        $this->actingAs($this->admin)->put(route('employee.update', [
+            'id' => $originalEmployee->id
+        ]), [
+            'name' => 'new name',
+            'email' => $originalEmployee->email,
+            'password' => $originalEmployee->password,
+            'role_id' => $originalEmployee->role_id
+        ])->assertSuccessful();
+
+        $originalEmployee->refresh();
+
+        $this->assertEquals('new name', $originalEmployee->name);
     }
 
     /** @test */

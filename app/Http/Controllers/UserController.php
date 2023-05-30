@@ -19,6 +19,23 @@ class UserController extends Controller
         return User::create($validated);
     }
 
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:30',
+            'email' => 'required|email:rfc,dns',
+            'password' => 'required',
+            'role_id' => 'required'
+        ]);
+        $user = User::findOrFail($id);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->password = $validated['password'];
+        $user->role_id = $validated['role_id'];
+        $user->save();
+    }
+
     public function delete($userId)
     {
         $user = User::findOrFail($userId);
