@@ -19,6 +19,12 @@ class UserController extends Controller
         return User::create($validated);
     }
 
+    public function delete($userId)
+    {
+        $user = User::findOrFail($userId);
+        $user->delete();
+    }
+
     public function promote($id)
     {
         $user = User::where('id', $id)->first();

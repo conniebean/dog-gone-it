@@ -52,7 +52,24 @@ class UserControllerTest extends TestCase
     /** @test */
     public function an_admin_can_delete_an_employee()
     {
-        self::markTestSkipped();
+        $newEmployee = User::factory()->create();
+        $this->actingAs($this->admin)->delete(route(
+            'employee.delete',
+            ['userId' => $newEmployee->id]),
+        )->assertSuccessful();
+
+        $this->assertDatabaseMissing('users', ['id' => $newEmployee->id]);
+    }
+
+    /** @test */
+    public function an_employee_cannot_delete_an_employee()
+    {
+        $this->actingAs($this->employee)->delete(route(
+            'employee.delete',
+            ['userId', $this->employee->id]),
+        )->assertUnauthorized();
+
+        $this->assertDatabaseHas('users', ['id' => $this->employee->id]);
     }
 
     /** @test */
