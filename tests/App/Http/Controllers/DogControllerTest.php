@@ -15,14 +15,7 @@ class DogControllerTest extends TestCase
         parent::setUp();
         $this->employee = User::factory()->create();
         $this->owner = Owner::factory()->create();
-        $this->dog = Dog::factory()
-            ->hasAttached(Vaccine::factory(3)
-                ->sequence(
-                    ['name' => Vaccine::REQUIRED_VACCINES['RABIES']],
-                    ['name' => Vaccine::REQUIRED_VACCINES['DA2PP']],
-                    ['name' => Vaccine::REQUIRED_VACCINES['BORDETELLA']],
-                )->create())
-            ->create(['owner_id' => $this->owner->id]);
+        $this->dog = Dog::factory()->for($this->owner)->create();
     }
 
     /** @test */
@@ -59,7 +52,7 @@ class DogControllerTest extends TestCase
     {
         $newDog = Dog::factory()->for($this->owner)->create();
         $vaccines = Vaccine::where('required', 1)->get();
-        foreach ($vaccines as $vaccine){
+        foreach ($vaccines as $vaccine) {
             $newDog->vaccines()->attach($vaccine->id, [
                 'expiry_date' => null
             ]);
@@ -68,6 +61,33 @@ class DogControllerTest extends TestCase
             ]);
         }
 
-       $this->assertTrue($newDog->isUpToDate());
+        $this->assertTrue($newDog->isUpToDate());
+    }
+
+    /** @test */
+    public function it_sets_expiry_date_to_null_when_the_date_passes()
+    {
+        $newDog = Dog::factory()->for($this->owner)->create();
+        $vaccines = Vaccine::where('required', 1)->get();
+        foreach ($vaccines as $vaccine) {
+            $newDog->vaccines()->attach($vaccine->id, [
+                'expiry_date' => now()
+            ]);
+        }
+        $this->assertfalse($newDog->isUpToDate());
+    }
+
+    /** @test */
+    public function it_only_updates_vaccines_where_the_expiry_date_is_now_or_before()
+    {
+        $newDog = Dog::factory()->for($this->owner)->create();
+        $vaccines = Vaccine::where('required', 1)->get();
+        foreach ($vaccines as $vaccine) {
+            $newDog->vaccines()->attach($vaccine->id, [
+                'expiry_date' => now()
+            ]);
+        }
+
+        $this->assertfalse($newDog->isUpToDate());
     }
 }

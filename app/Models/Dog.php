@@ -39,6 +39,17 @@ class Dog extends Model
         return $this->belongsToMany(Vaccine::class)->withPivot(['expiry_date']);
     }
 
+    public function setExpiryToNull()
+    {
+        if ($this->vaccines()->wherePivot('expiry_date', '<=', now())->get()){
+            foreach ($this->vaccines() as $vaccine) {
+                $this->vaccines()->updateExistingPivot($vaccine->id, [
+                    'expiry_date' => null
+                ]);
+            }
+        }
+    }
+
     public function hasAllRequiredVaccines(): bool
     {
         $requiredVaccines = Vaccine::where('required', true)->pluck('id')->toArray();
@@ -48,6 +59,19 @@ class Dog extends Model
 
     public function isUpToDate(): bool
     {
+        $expiredVaccines = $this->vaccines()
+            ->wherePivot('expiry_date', '<=', now())
+            ->wherePivotNotNull('expiry_date')
+            ->get();
+
+        if ($expiredVaccines->isNotEmpty()) {
+            foreach ($expiredVaccines as $vaccine) {
+                $this->vaccines()->updateExistingPivot($vaccine->id, [
+                    'expiry_date' => null
+                ]);
+            }
+        }
+
         return !$this->vaccines()->whereNull('expiry_date')->exists() && $this->hasAllRequiredVaccines();
     }
 }
