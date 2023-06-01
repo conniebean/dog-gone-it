@@ -36,7 +36,7 @@ class Dog extends Model
 
     public function vaccines(): BelongsToMany
     {
-        return $this->belongsToMany(Vaccine::class)->withPivot([]);
+        return $this->belongsToMany(Vaccine::class)->withPivot(['expiry_date']);
     }
 
     public function hasAllRequiredVaccines(): bool
@@ -48,7 +48,6 @@ class Dog extends Model
 
     public function isUpToDate(): bool
     {
-        return $this->vaccines()->where('up_to_date', false)->count() === 0
-            && $this->hasAllRequiredVaccines();
+        return !$this->vaccines()->whereNull('expiry_date')->exists() && $this->hasAllRequiredVaccines();
     }
 }

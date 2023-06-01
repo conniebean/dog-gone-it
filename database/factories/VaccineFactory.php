@@ -18,12 +18,8 @@ class VaccineFactory extends Factory
      */
     public function definition()
     {
-        $expires = $this->faker->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d');
-        $upToDate = $expires >= now()->format('Y-m-d');
         return [
             'name' => 'LEPTO',
-            'expires' => $expires,
-            'up_to_date' => $upToDate,
             'required' => false
         ];
     }

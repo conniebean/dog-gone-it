@@ -20,6 +20,16 @@ class Vaccine extends Model
 
     public function dogs(): BelongsToMany
     {
-        return $this->belongsToMany(Dog::class);
+        return $this->belongsToMany(Dog::class)->withPivot([]);
+    }
+
+    public function updateVaccine(): void
+    {
+        $notExpired = $this->query()->where('expires', '>=', now());
+        $shouldBeUpToDate = $this->query()->where('up_to_date', false);
+        if ($notExpired && $shouldBeUpToDate) {
+            $this->update(['up_to_date' => true]);
+            $this->save();
+        }
     }
 }

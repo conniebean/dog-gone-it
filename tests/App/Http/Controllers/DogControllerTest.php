@@ -57,6 +57,17 @@ class DogControllerTest extends TestCase
     /** @test */
     public function it_can_update_a_dogs_vaccines()
     {
-        self::markTestSkipped();
+        $newDog = Dog::factory()->for($this->owner)->create();
+        $vaccines = Vaccine::where('required', 1)->get();
+        foreach ($vaccines as $vaccine){
+            $newDog->vaccines()->attach($vaccine->id, [
+                'expiry_date' => null
+            ]);
+            $newDog->vaccines()->updateExistingPivot($vaccine->id, [
+                'expiry_date' => '2023-12-23'
+            ]);
+        }
+
+       $this->assertTrue($newDog->isUpToDate());
     }
 }

@@ -14,19 +14,16 @@ use Tests\TestCase;
 
 class DaycareControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
     protected function setUp(): void
     {
         parent::setUp();
         $this->time = Carbon::now();
         $this->employee = User::factory()->create();
         $this->owner = Owner::factory()->create();
-        $this->dog = Dog::factory()
-            ->for($this->owner)
-            ->hasAttached(Vaccine::where('required', 1)->get())
-            ->create();
-        $this->dog->vaccines()->update(['up_to_date' => 1]);
+        $this->dog = Dog::factory()->for($this->owner)->create();
+        $this->vaccines = Vaccine::where('required', 1)->get();
+
+        $this->attachVaccines('2023-12-03');
     }
 
     /** @test */
@@ -52,9 +49,9 @@ class DaycareControllerTest extends TestCase
     {
         $dogWithoutUpToDateVaccines = Dog::factory()
             ->for($this->owner)
-            ->hasAttached(Vaccine::where('required', 1)->get())
             ->create();
-        $dogWithoutUpToDateVaccines->vaccines()->update(['up_to_date' => 0]);
+
+        $this->attachVaccines();
 
         $this->postToDaycare($this->time->subDay()->toDateString(), $dogWithoutUpToDateVaccines)->assertInvalid();
 
@@ -76,7 +73,9 @@ class DaycareControllerTest extends TestCase
     public function it_cannot_add_a_dog_if_they_do_not_have_all_required_vaccines()
     {
         $newDog = Dog::factory()->create();
-        $newDog->vaccines()->attach(Vaccine::where('required', 1)->first());
+        $newDog->vaccines()->attach(Vaccine::where('required', 1)->first(), [
+            'expiry_date' => '2023-12-24'
+        ]);
 
         $this->postToDaycare($this->time->toDateString(), $newDog)->assertForbidden();
         $this->assertEquals(false, $newDog->hasAllRequiredVaccines());
@@ -106,5 +105,14 @@ class DaycareControllerTest extends TestCase
                 'daycare-date' => $time
             ])
         );
+    }
+
+    public function attachVaccines($date = null): void
+    {
+        foreach ($this->vaccines as $vaccine) {
+            $this->dog->vaccines()->attach($vaccine->id, [
+                'expiry_date' => $date,
+            ]);
+        }
     }
 }
