@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //TODO: HOW PAY MONIES?
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dog_id')->nullable()->constrained('dogs')->cascadeOnDelete();
-            $table->string('serviceable_id');
-            $table->string('serviceable_type');
-            $table->boolean('is_paid');
+            $table->string('address');
+            $table->string('phone_number');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('facilities');
     }
 };

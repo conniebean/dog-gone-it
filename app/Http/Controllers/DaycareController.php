@@ -36,6 +36,8 @@ class DaycareController extends Controller
      */
     public function store(Request $request)
     {
+        //todo: move stuff to appointments controller, this stuff
+        //  no longer exists
         $validated = $request->validate([
             'dog_id' => 'required|string|max:30',
             'visit-type' => 'required|string|max:30',
@@ -52,14 +54,15 @@ class DaycareController extends Controller
         $alreadyInDaycare = Daycare::where('dog_id', $dog->id)->where('daycare-date', $validated['daycare-date'])->first();
 
         if(!$dog->isUpToDate()){
-            abort(403, 'The vaccines for this pet are out of date, or they do not have all the required vaccines! They cannot come to daycare.');
+            abort(422, 'The vaccines for this pet are out of date, or they do not have all the required vaccines! They cannot come to daycare.');
         }
         if($alreadyInDaycare){
-            abort(403, 'Dog already in daycare for the day.');
+            abort(422, 'Dog already in daycare for the day.');
         }
-        if(Daycare::maxReached($validated['daycare-date'])){
-            abort(403, 'Daycare is full for this date. Please choose another day to visit.');
-        }
+        //todo: maxReached will exist on the individual facility
+//        if(Daycare::maxReached($validated['daycare-date'])){
+//            abort(422, 'Daycare is full for this date. Please choose another day to visit.');
+//        }
 
         return Daycare::create($validated);
     }

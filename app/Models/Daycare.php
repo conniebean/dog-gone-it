@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Daycare extends Service
+class Daycare extends Model
 {
     use HasFactory;
 
@@ -15,7 +17,8 @@ class Daycare extends Service
 
     protected $table = 'daycare';
 
-    public const MAX_OCCUPANCY = 20;
+    //TODO: move this to facility class but add daycare/grooming/boarding max occupancy
+//    public const MAX_OCCUPANCY = 20;
 
     public const VISIT_TYPE = [
         'half-day' => 'half-day',
@@ -26,14 +29,14 @@ class Daycare extends Service
     {
         return $this->hasMany(Dog::class, 'dog_id', 'id');
     }
+    //todo: bring this back in to facilities model for each appointmentable type
+//    public function scopeMaxReached($query, $date): bool
+//    {
+//        return $query->where('appointment_date', $date)->count() === self::MAX_OCCUPANCY;
+//    }
 
-    public function scopeMaxReached($query, $date): bool
+    public function appointments(): morphMany
     {
-        return $query->where('daycare-date', $date)->count() === self::MAX_OCCUPANCY;
-    }
-
-    public function service(): morphOne
-    {
-        return $this->morphOne(Service::class, 'serviceable');
+        return $this->morphMany(Appointment::class, 'appointmentable');
     }
 }

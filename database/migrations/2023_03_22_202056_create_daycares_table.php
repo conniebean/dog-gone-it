@@ -15,12 +15,7 @@ return new class extends Migration
     {
         Schema::create('daycare', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dog_id')->constrained();
-            $table->string('visit-type');
-            $table->boolean('paid');
-            $table->dateTime('check-in')->nullable();
-            $table->dateTime('check-out')->nullable();
-            $table->date('daycare-date');
+            $table->string('visit_type');
             $table->timestamps();
         });
     }

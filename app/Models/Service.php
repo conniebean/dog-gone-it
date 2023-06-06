@@ -35,18 +35,5 @@ class Service extends Model
         return $this->morphTo();
     }
 
-    public function daycare(): MorphTo
-    {
-        return $this->morphTo(self::SERVICES['daycare'], 'serviceable_type', 'serviceable_id');
-    }
 
-    public function grooming(): MorphTo
-    {
-        return $this->morphTo(self::SERVICES['grooming'], 'serviceable_type', 'serviceable_id');
-    }
-
-    public function boarding(): MorphTo
-    {
-        return $this->morphTo(self::SERVICES['boarding'], 'serviceable_type', 'serviceable_id');
-    }
 }

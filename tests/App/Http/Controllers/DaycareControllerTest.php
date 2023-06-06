@@ -17,19 +17,19 @@ class DaycareControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->time = Carbon::now();
+        $this->date = Carbon::now();
         $this->employee = User::factory()->create();
         $this->owner = Owner::factory()->create();
         $this->dog = Dog::factory()->for($this->owner)->create();
         $this->vaccines = Vaccine::where('required', 1)->get();
 
-        $this->attachVaccines('2023-12-03');
+        $this->attachVaccines($this->dog, $this->date->addWeek()->toDateString());
     }
 
     /** @test */
     public function it_can_add_a_dog_to_the_daycare()
     {
-        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
+        $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
 
@@ -39,7 +39,7 @@ class DaycareControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
-        $this->postToDaycare($this->time->subDay()->toDateString(), $this->dog)->assertInvalid();
+        $this->postToDaycare($this->date->subDay()->toDateString(), $this->dog)->assertInvalid();
 
         $this->assertDatabaseMissing('daycare', ['dog_id' => $this->dog->id]);
     }
@@ -51,9 +51,9 @@ class DaycareControllerTest extends TestCase
             ->for($this->owner)
             ->create();
 
-        $this->attachVaccines();
+        $this->attachVaccines($dogWithoutUpToDateVaccines);
 
-        $this->postToDaycare($this->time->subDay()->toDateString(), $dogWithoutUpToDateVaccines)->assertInvalid();
+        $this->postToDaycare($dogWithoutUpToDateVaccines, $this->date->subDay()->toDateString())->assertUnprocessable();
 
         $this->assertDatabaseMissing('daycare', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
     }
@@ -62,11 +62,11 @@ class DaycareControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_more_than_once_on_the_same_day()
     {
-        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertSuccessful();
+        $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
 
         $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
 
-        $this->postToDaycare($this->time->toDateString(), $this->dog)->assertForbidden();
+        $this->postToDaycare($this->dog, $this->date->toDateString())->assertUnprocessable();
     }
 
     /** @test */
@@ -77,17 +77,19 @@ class DaycareControllerTest extends TestCase
             'expiry_date' => '2023-12-24'
         ]);
 
-        $this->postToDaycare($this->time->toDateString(), $newDog)->assertForbidden();
+        $this->postToDaycare($newDog, $this->date->toDateString())->assertUnprocessable();
         $this->assertEquals(false, $newDog->hasAllRequiredVaccines());
     }
 
     /** @test */
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
-        Daycare::factory(20)->create(['daycare-date' => $this->time->toDateString()]);
+        Daycare::factory(20)->create(['daycare-date' => $this->date->toDateString()]);
         $newDog = Dog::factory()->create(['owner_id' => $this->owner]);
+        $this->attachVaccines($newDog, $this->date->addWeek()->toDateString());
 
-        $this->postToDaycare($this->time->toDateString(), $newDog)->assertForbidden();
+        $this->postToDaycare($newDog, $this->date->toDateString())->assertUnprocessable();
+
     }
 
     public function vaccinesUpToDate()
@@ -95,22 +97,22 @@ class DaycareControllerTest extends TestCase
         return $this->dog->hasAllRequiredVaccines();
     }
 
-    public function postToDaycare($time, $dog): TestResponse
+    public function postToDaycare($dog, $date): TestResponse
     {
         return $this->actingAs($this->employee)->post(
             route('daycare.store', [
                 'dog_id' => $dog,
                 'visit-type' => 'full-day',
                 'paid' => false,
-                'daycare-date' => $time
+                'daycare-date' => $date
             ])
         );
     }
 
-    public function attachVaccines($date = null): void
+    public function attachVaccines(Dog $dog, $date = null): void
     {
         foreach ($this->vaccines as $vaccine) {
-            $this->dog->vaccines()->attach($vaccine->id, [
+            $dog->vaccines()->attach($vaccine->id, [
                 'expiry_date' => $date,
             ]);
         }

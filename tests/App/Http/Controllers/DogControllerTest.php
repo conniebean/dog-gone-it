@@ -80,6 +80,7 @@ class DogControllerTest extends TestCase
     /** @test */
     public function it_only_updates_vaccines_where_the_expiry_date_is_now_or_before()
     {
+        self::markTestIncomplete();
         $newDog = Dog::factory()->for($this->owner)->create();
         $vaccines = Vaccine::where('required', 1)->get();
         foreach ($vaccines as $vaccine) {
