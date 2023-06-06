@@ -40,6 +40,7 @@ Route::prefix('employee')->group(function() {
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
 });
 
+//todo: remove this and create appointment endpoints
 Route::prefix('daycare')->group(function(){
     Route::post('store', DaycareController::class . '@store')->name('daycare.store');
 });

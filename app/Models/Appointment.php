@@ -13,6 +13,12 @@ class Appointment extends Model
 
     protected $guarded = [];
 
+    public const APPOINTMENT_TYPES = [
+        'daycare',
+        'grooming',
+        'boarding'
+    ];
+
     public function appointmentable(): MorphTo
     {
         return $this->morphTo();
