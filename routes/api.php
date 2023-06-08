@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DaycareController;
 use App\Http\Controllers\DogController;
 use App\Http\Controllers\OwnerController;
@@ -40,8 +41,7 @@ Route::prefix('employee')->group(function() {
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
 });
 
-//todo: remove this and create appointment endpoints
-Route::prefix('daycare')->group(function(){
-    Route::post('store', DaycareController::class . '@store')->name('daycare.store');
+Route::prefix('appointment')->group(function(){
+    Route::post('store', AppointmentController::class . '@store')->name('appointment.store');
 });
 

@@ -2,6 +2,7 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
 use App\Models\Facility;
@@ -32,7 +33,7 @@ class AppointmentControllerTest extends TestCase
     {
         $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
 
-        $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
+        $this->assertDatabaseHas('appointments', ['dog_id' => $this->dog->id]);
 
         //TODO: dispatch confirmation email to owner
     }
@@ -40,9 +41,9 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
-        $this->postToDaycare($this->dog, $this->date->subDay()->toDateString())->assertInvalid();
+        $this->postToDaycare($this->dog, $this->date->subMonth()->toDateString())->assertInvalid();
 
-        $this->assertDatabaseMissing('daycare', ['dog_id' => $this->dog->id]);
+        $this->assertDatabaseMissing('appointments', ['dog_id' => $this->dog->id]);
     }
 
     /** @test */
@@ -56,7 +57,7 @@ class AppointmentControllerTest extends TestCase
 
         $this->postToDaycare($dogWithoutUpToDateVaccines, $this->date->subDay()->toDateString())->assertUnprocessable();
 
-        $this->assertDatabaseMissing('daycare', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
+        $this->assertDatabaseMissing('appointments', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
     }
 
 
@@ -65,7 +66,7 @@ class AppointmentControllerTest extends TestCase
     {
         $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
 
-        $this->assertDatabaseHas('daycare', ['dog_id' => $this->dog->id]);
+        $this->assertDatabaseHas('appointments', ['dog_id' => $this->dog->id]);
 
         $this->postToDaycare($this->dog, $this->date->toDateString())->assertUnprocessable();
     }
@@ -85,13 +86,26 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
-        //todo: these are appointments now,
-        self::markTestSkipped();
-        Daycare::factory(20)->create(['daycare-date' => $this->date->toDateString()]);
+        $facility = Facility::factory()->create();
+        Appointment::factory(20)->create([
+            'appointment_date' => $this->date->toDateString(),
+            'facility_id' => $facility->id
+        ]);
         $newDog = Dog::factory()->create(['owner_id' => $this->owner->id]);
         $this->attachVaccines($newDog, $this->date->addWeek()->toDateString());
 
-        $this->postToDaycare($newDog, $this->date->toDateString())->assertUnprocessable();
+        $this->actingAs($this->employee)->post(
+            route('appointment.store', [
+                'dog_id' => $newDog->id,
+                'facility_id' => $facility->id,
+                'appointmentable_id' => 1,
+                'appointmentable_type' => Daycare::class,
+                'check_in' => $this->date->subHour(),
+                'check_out' => $this->date->addHour(),
+                'appointment_date' => $this->date->toDateString(),
+                'paid' => false
+            ])
+        )->assertUnprocessable();
 
     }
 
@@ -106,7 +120,6 @@ class AppointmentControllerTest extends TestCase
         return $this->actingAs($this->employee)->post(
             route('appointment.store', [
                 'dog_id' => $dog->id,
-                'owner_id' => $this->owner->id,
                 'facility_id' => $facility->id,
                 'appointmentable_id' => 1,
                 'appointmentable_type' => Daycare::class,

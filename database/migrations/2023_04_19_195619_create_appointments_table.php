@@ -16,12 +16,11 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dog_id')->constrained('dogs')->cascadeOnDelete();
-            $table->foreignId('owner_id')->constrained('owners')->cascadeOnDelete();
             $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
             $table->string('appointmentable_id');
             $table->string('appointmentable_type');
-            $table->time('check_in');
-            $table->time('check_out');
+            $table->time('check_in')->nullable();
+            $table->time('check_out')->nullable();
             $table->dateTime('appointment_date');
             $table->boolean('paid');
             $table->timestamps();

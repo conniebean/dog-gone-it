@@ -40,18 +40,17 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'dog_id' => 'required|string',
-            'owner_id' => 'required|string',
             'facility_id' => 'required|string',
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
             'check_in' => 'date',
             'check_out' =>  'date',
-            'appointment_date' => 'date',
+            'appointment_date' => 'required|date|after_or_equal:today',
             'paid' => 'required|boolean'
         ],
-            [
-                'appointment_date.after_or_equal' => 'Daycare-date must be today or a date in the future.'
-            ]);
+        [
+            'appointment_date.after_or_equal' => 'Daycare-date must be today or a date in the future.'
+        ]);
 
         $dog = Dog::where('id', $validated['dog_id'])->first();
         $alreadyInDaycare = Appointment::where('dog_id', $dog->id)->where('appointment_date', $validated['appointment_date'])->first();

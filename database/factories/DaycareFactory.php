@@ -18,12 +18,9 @@ class DaycareFactory extends Factory
      */
     public function definition()
     {
-        $dog = Dog::count() ? Dog::all() : Dog::factory(3)->create();
         return [
-            'dog_id' => $dog->random()->id,
-            'visit-type' => $this->faker->randomElement(Daycare::VISIT_TYPE),
-            'paid' => $this->faker->boolean,
-            'daycare-date' => $this->faker->dateTimeBetween('now', '+1 month')
+            //todo: should this just be on the appointments table?
+            'visit_type' => $this->faker->randomElement(Daycare::VISIT_TYPE),
         ];
     }
 }
