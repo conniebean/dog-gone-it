@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('address');
             $table->string('phone_number');
+            $table->integer('daycare_capacity');
             $table->timestamps();
         });
     }

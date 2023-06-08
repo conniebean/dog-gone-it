@@ -20,12 +20,13 @@ class AppointmentControllerTest extends TestCase
     {
         parent::setUp();
         $this->date = Carbon::now();
+        $this->vaccineExpiryDate = Carbon::now()->addWeek();
         $this->employee = User::factory()->create();
         $this->owner = Owner::factory()->create();
         $this->dog = Dog::factory()->for($this->owner)->create();
         $this->vaccines = Vaccine::where('required', 1)->get();
 
-        $this->attachVaccines($this->dog, $this->date->addWeek()->toDateString());
+        $this->attachVaccines($this->dog, $this->vaccineExpiryDate->toDateString());
     }
 
     /** @test */
@@ -55,7 +56,7 @@ class AppointmentControllerTest extends TestCase
 
         $this->attachVaccines($dogWithoutUpToDateVaccines);
 
-        $this->postToDaycare($dogWithoutUpToDateVaccines, $this->date->subDay()->toDateString())->assertUnprocessable();
+        $this->postToDaycare($dogWithoutUpToDateVaccines, $this->date->addWeek()->toDateString())->assertUnprocessable();
 
         $this->assertDatabaseMissing('appointments', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
     }
@@ -86,13 +87,15 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
+        Carbon::setTestNow();
         $facility = Facility::factory()->create();
         Appointment::factory(20)->create([
             'appointment_date' => $this->date->toDateString(),
             'facility_id' => $facility->id
         ]);
+
         $newDog = Dog::factory()->create(['owner_id' => $this->owner->id]);
-        $this->attachVaccines($newDog, $this->date->addWeek()->toDateString());
+        $this->attachVaccines($newDog, $this->vaccineExpiryDate->toDateString());
 
         $this->actingAs($this->employee)->post(
             route('appointment.store', [
@@ -106,7 +109,6 @@ class AppointmentControllerTest extends TestCase
                 'paid' => false
             ])
         )->assertUnprocessable();
-
     }
 
     public function vaccinesUpToDate()

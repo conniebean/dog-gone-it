@@ -61,10 +61,9 @@ class AppointmentController extends Controller
         if($alreadyInDaycare){
             abort(422, 'Dog already in daycare for the day.');
         }
-        //todo: maxReached will exist on the individual facility
-//        if(Daycare::maxReached($validated['daycare-date'])){
-//            abort(422, 'Daycare is full for this date. Please choose another day to visit.');
-//        }
+        if(Facility::daycareMaxReached($validated['appointment_date'])){
+            abort(422, 'Daycare is full for this date. Please choose another day to visit.');
+        }
 
         return Appointment::create($validated);
     }

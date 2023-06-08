@@ -18,7 +18,8 @@ class FacilityFactory extends Factory
     {
         return [
             'address' => $this->faker->address(),
-            'phone_number' => $this->faker->phoneNumber()
+            'phone_number' => $this->faker->phoneNumber(),
+            'daycare_capacity' => 20
         ];
     }
 }
