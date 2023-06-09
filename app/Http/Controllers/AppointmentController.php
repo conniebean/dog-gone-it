@@ -61,7 +61,9 @@ class AppointmentController extends Controller
         if($alreadyInDaycare){
             abort(422, 'Dog already in daycare for the day.');
         }
-        if(Facility::daycareMaxReached($validated['appointment_date'])){
+
+        $facility = Facility::where('id', $validated['facility_id'])->first();
+        if(Facility::daycareMaxReached($validated['appointment_date'], $facility->daycare_capacity)){
             abort(422, 'Daycare is full for this date. Please choose another day to visit.');
         }
 

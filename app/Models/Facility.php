@@ -23,11 +23,10 @@ class Facility extends Model
         return Appointment::query()->where('facility_id', $this->id);
     }
 
-    public function scopeDaycareMaxReached($query, $date): bool
+    public function scopeDaycareMaxReached($query, $date, $capacity): bool
     {
-        //todo: this is passing but need no hard coded value for daycare_capacity
         return $query
                 ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
-                ->where('appointments.appointment_date', $date)->count() === 20; //should be specific facility.daycare_capacity;
+                ->where('appointments.appointment_date', $date)->count() === $capacity;
     }
 }
