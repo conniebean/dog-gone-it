@@ -21,12 +21,12 @@ class DogFactory extends Factory
         $owners = Owner::all();
         return [
             'id' => $this->faker->unique()->randomNumber(),
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
             'breed' => $this->faker->randomElement(Dog::BREEDS),
             'sex' => $this->faker->randomElement(Dog::GENDER),
             'date_of_birth' => $this->faker->date(),
             'owner_id' => $owners->random()->id,
-            'fixed' => $this->faker->boolean
+            'fixed' => $this->faker->boolean()
         ];
     }
 }

@@ -25,6 +25,8 @@ class AppointmentControllerTest extends TestCase
         $this->owner = Owner::factory()->create();
         $this->dog = Dog::factory()->for($this->owner)->create();
         $this->vaccines = Vaccine::where('required', 1)->get();
+        $this->facility = Facility::factory()->create();
+
 
         $this->attachVaccines($this->dog, $this->vaccineExpiryDate->toDateString());
     }
@@ -88,27 +90,15 @@ class AppointmentControllerTest extends TestCase
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
         Carbon::setTestNow();
-        $facility = Facility::factory()->create();
         Appointment::factory(20)->create([
             'appointment_date' => $this->date->toDateString(),
-            'facility_id' => $facility->id
+            'facility_id' => $this->facility->id
         ]);
 
         $newDog = Dog::factory()->create(['owner_id' => $this->owner->id]);
         $this->attachVaccines($newDog, $this->vaccineExpiryDate->toDateString());
 
-        $this->actingAs($this->employee)->post(
-            route('appointment.store', [
-                'dog_id' => $newDog->id,
-                'facility_id' => $facility->id,
-                'appointmentable_id' => 1,
-                'appointmentable_type' => Daycare::class,
-                'check_in' => $this->date->subHour(),
-                'check_out' => $this->date->addHour(),
-                'appointment_date' => $this->date->toDateString(),
-                'paid' => false
-            ])
-        )->assertUnprocessable();
+        $this->postToDaycare($newDog, $this->date->toDateString())->assertUnprocessable();
     }
 
     public function vaccinesUpToDate()
@@ -118,11 +108,10 @@ class AppointmentControllerTest extends TestCase
 
     public function postToDaycare($dog, $date): TestResponse
     {
-        $facility = Facility::factory()->create();
         return $this->actingAs($this->employee)->post(
             route('appointment.store', [
                 'dog_id' => $dog->id,
-                'facility_id' => $facility->id,
+                'facility_id' => $this->facility->id,
                 'appointmentable_id' => 1,
                 'appointmentable_type' => Daycare::class,
                 'check_in' => $this->date->subHour(),
