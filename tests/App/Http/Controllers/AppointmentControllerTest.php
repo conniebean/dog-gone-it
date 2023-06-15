@@ -98,30 +98,29 @@ class AppointmentControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_an_appointment()
+    public function it_can_remove_a_dog_from_daycare()
     {
+        $newDog = Dog::factory()->create();
+        $this->attachVaccines($newDog, $this->vaccineExpiryDate->toDateString());
         $appointmentToDelete = Appointment::factory()->create([
-            'dog_id' => $this->dog->id,
             'appointment_date' => $this->date->toDateString(),
-            'facility_id' => $this->facility->id
+            'facility_id' => $this->facility->id,
+            'dog_id' => $newDog->id
         ]);
-
         Appointment::factory(5)->create([
             'appointment_date' => $this->date->toDateString(),
             'facility_id' => $this->facility->id
         ]);
 
+        $this->assertDatabaseHas('appointments', ['dog_id' => $newDog->id]);
         $this->assertEquals(6, Appointment::all()->count());
-        $this->assertDatabaseHas('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
 
-        $this->actingAs($this->employee)->delete(route(
-            'appointment.delete', ['id' => $appointmentToDelete->id]))
+        $this->actingAs($this->employee)->delete
+        (route('appointment.delete', $appointmentToDelete->id))
             ->assertSuccessful();
 
+        $this->assertDatabaseMissing('appointments', ['dog_id' => $newDog->id, 'id' => $appointmentToDelete->id]);
         $this->assertEquals(5, Appointment::all()->count());
-        $this->assertDatabaseMissing('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
-
-        //COMMIT YA DAMN WORK
     }
 
     /** @test */
@@ -145,9 +144,13 @@ class AppointmentControllerTest extends TestCase
         $this->assertEquals($appointment['appointment_date'], $this->date->addWeek()->toDateString());
     }
 
-    public function vaccinesUpToDate()
+    public function attachVaccines(Dog $dog, $date = null): void
     {
-        return $this->dog->hasAllRequiredVaccines();
+        foreach ($this->vaccines as $vaccine) {
+            $dog->vaccines()->attach($vaccine->id, [
+                'expiry_date' => $date,
+            ]);
+        }
     }
 
     public function postToDaycare($dog, $date): TestResponse
@@ -164,14 +167,5 @@ class AppointmentControllerTest extends TestCase
                 'paid' => false
             ])
         );
-    }
-
-    public function attachVaccines(Dog $dog, $date = null): void
-    {
-        foreach ($this->vaccines as $vaccine) {
-            $dog->vaccines()->attach($vaccine->id, [
-                'expiry_date' => $date,
-            ]);
-        }
     }
 }

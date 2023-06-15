@@ -26,8 +26,7 @@ class Facility extends Model
     public function scopeDaycareMaxReached($query, $date, $capacity): bool
     {
         return $query
-                ->join('appointments as a', 'a.facility_id', '=', 'facilities.id')
-                ->where('a.appointment_date', $date)
-                ->count() === $capacity;
+                ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
+                ->where('appointments.appointment_date', $date)->count() === $capacity;
     }
 }
