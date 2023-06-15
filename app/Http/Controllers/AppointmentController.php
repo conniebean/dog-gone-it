@@ -110,8 +110,10 @@ class AppointmentController extends Controller
      * @param \App\Models\Daycare $daycare
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Daycare $daycare)
+    public function delete($id)
     {
-        //
+        $appt = Appointment::find($id);
+
+        $appt->delete();
     }
 }

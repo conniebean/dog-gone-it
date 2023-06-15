@@ -100,7 +100,6 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_can_delete_an_appointment()
     {
-        //create many appointments
         $appointmentToDelete = Appointment::factory()->create([
             'dog_id' => $this->dog->id,
             'appointment_date' => $this->date->toDateString(),
@@ -115,12 +114,9 @@ class AppointmentControllerTest extends TestCase
         $this->assertEquals(6, Appointment::all()->count());
         $this->assertDatabaseHas('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
 
-        //hit delete route with specific appointment id
         $this->actingAs($this->employee)->delete(route(
-            'appointment.delete'),
-            $appointmentToDelete->id)
+            'appointment.delete', ['id' => $appointmentToDelete->id]))
             ->assertSuccessful();
-        //assert not in the database
 
         $this->assertEquals(5, Appointment::all()->count());
         $this->assertDatabaseMissing('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
