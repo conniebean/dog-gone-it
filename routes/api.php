@@ -44,5 +44,6 @@ Route::prefix('employee')->group(function() {
 Route::prefix('appointment')->group(function(){
     Route::post('store', AppointmentController::class . '@store')->name('appointment.store');
     Route::delete('delete/{appointmentId}', AppointmentController::class . '@delete')->name('appointment.delete');
+    //add update and index routes
 });
 
