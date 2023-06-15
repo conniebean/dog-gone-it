@@ -29,11 +29,6 @@ class Daycare extends Model
     {
         return $this->hasMany(Dog::class, 'dog_id', 'id');
     }
-    //todo: bring this back in to facilities model for each appointmentable type
-//    public function scopeMaxReached($query, $date): bool
-//    {
-//        return $query->where('appointment_date', $date)->count() === self::MAX_OCCUPANCY;
-//    }
 
     public function appointments(): morphMany
     {

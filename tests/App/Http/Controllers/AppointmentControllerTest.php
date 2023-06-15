@@ -10,7 +10,6 @@ use App\Models\Owner;
 use App\Models\User;
 use App\Models\Vaccine;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -26,7 +25,6 @@ class AppointmentControllerTest extends TestCase
         $this->dog = Dog::factory()->for($this->owner)->create();
         $this->vaccines = Vaccine::where('required', 1)->get();
         $this->facility = Facility::factory()->create();
-
 
         $this->attachVaccines($this->dog, $this->vaccineExpiryDate->toDateString());
     }
@@ -63,7 +61,6 @@ class AppointmentControllerTest extends TestCase
         $this->assertDatabaseMissing('appointments', ['dog_id' => $dogWithoutUpToDateVaccines->id]);
     }
 
-
     /** @test */
     public function it_cannot_add_a_dog_more_than_once_on_the_same_day()
     {
@@ -89,7 +86,6 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_daycare_when_the_daycare_is_full()
     {
-        Carbon::setTestNow();
         Appointment::factory(20)->create([
             'appointment_date' => $this->date->toDateString(),
             'facility_id' => $this->facility->id
@@ -99,6 +95,58 @@ class AppointmentControllerTest extends TestCase
         $this->attachVaccines($newDog, $this->vaccineExpiryDate->toDateString());
 
         $this->postToDaycare($newDog, $this->date->toDateString())->assertUnprocessable();
+    }
+
+    /** @test */
+    public function it_can_delete_an_appointment()
+    {
+        //create many appointments
+        $appointmentToDelete = Appointment::factory()->create([
+            'dog_id' => $this->dog->id,
+            'appointment_date' => $this->date->toDateString(),
+            'facility_id' => $this->facility->id
+        ]);
+
+        Appointment::factory(5)->create([
+            'appointment_date' => $this->date->toDateString(),
+            'facility_id' => $this->facility->id
+        ]);
+
+        $this->assertEquals(6, Appointment::all()->count());
+        $this->assertDatabaseHas('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
+
+        //hit delete route with specific appointment id
+        $this->actingAs($this->employee)->delete(route(
+            'appointment.delete'),
+            $appointmentToDelete->id)
+            ->assertSuccessful();
+        //assert not in the database
+
+        $this->assertEquals(5, Appointment::all()->count());
+        $this->assertDatabaseMissing('appointments', ['id' => $appointmentToDelete->id, 'dog_id' => $this->dog->id]);
+
+        //COMMIT YA DAMN WORK
+    }
+
+    /** @test */
+    public function it_can_update_an_existing_appointment()
+    {
+        self::markTestSkipped();
+        //create an appointment
+        $appointment = Appointment::factory()->create([
+            'appointment_date' => $this->date->toDateString(),
+            'facility_id' => $this->facility->id
+        ]);
+
+        //hit our update route
+        $this->actingAs($this->employee)->put(route('appointment.update', $appointment->id,
+            [
+
+            ]
+        ))->assertSuccessful();
+        $appointment->update(['appointment_date' => $this->date->addWeek()->toDateString()]);
+        //assert the expected value of what was updated to not equal what it was in the first entry
+        $this->assertEquals($appointment['appointment_date'], $this->date->addWeek()->toDateString());
     }
 
     public function vaccinesUpToDate()
