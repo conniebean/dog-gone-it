@@ -40,6 +40,18 @@ class AppointmentControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_show_the_list_of_daycare_appointments_for_a_single_day()
+    {
+        self::markTestSkipped();
+        //make a ton of appointments for today
+        //make a ton of appointments for another day
+
+        //hit our index route
+
+        //assert that we see all the appointments for today and not another day
+    }
+
+    /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
         $this->postToDaycare($this->dog, $this->date->subMonth()->toDateString())->assertInvalid();
