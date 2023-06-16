@@ -9,6 +9,7 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
+        //todo: custom form request for this
         $validated = $request->validate([
             'name' => 'required|string|max:30',
             'email' => 'required|email:rfc,dns',

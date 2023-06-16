@@ -17,7 +17,8 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        //todo: find out how to index all appointments on a single date
+        return Appointment::all();
     }
 
     /**
@@ -67,6 +68,9 @@ class AppointmentController extends Controller
             abort(422, 'Daycare is full for this date. Please choose another day to visit.');
         }
 
+        //create an appointment resource with a function that returns an array of params that we want
+
+        //return AppointmentResource::make(Appointment::create($validated));
         return Appointment::create($validated);
     }
 
@@ -99,9 +103,12 @@ class AppointmentController extends Controller
      * @param \App\Models\Daycare $daycare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Daycare $daycare)
+    public function update(Request $request, $id)
     {
-        //
+        //todo: add our custom form request to this for validation
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($request->all());
+        $appointment->save();
     }
 
     /**

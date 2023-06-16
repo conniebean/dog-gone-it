@@ -126,22 +126,24 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_can_update_an_existing_appointment()
     {
-        self::markTestSkipped();
-        //create an appointment
+        $this->withoutExceptionHandling();
         $appointment = Appointment::factory()->create([
             'appointment_date' => $this->date->toDateString(),
-            'facility_id' => $this->facility->id
+            'facility_id' => $this->facility->id,
+            'paid' => false
         ]);
 
-        //hit our update route
-        $this->actingAs($this->employee)->put(route('appointment.update', $appointment->id,
-            [
+        $this->assertEquals(0, $appointment['paid']);
 
-            ]
-        ))->assertSuccessful();
-        $appointment->update(['appointment_date' => $this->date->addWeek()->toDateString()]);
-        //assert the expected value of what was updated to not equal what it was in the first entry
-        $this->assertEquals($appointment['appointment_date'], $this->date->addWeek()->toDateString());
+        $this->actingAs($this->employee)->put(route('appointment.update', [
+            'appointmentId' => $appointment->id
+        ]), [
+                'paid' => true
+            ])->assertSuccessful();
+
+        $appointment->refresh();
+
+        $this->assertEquals(1, $appointment['paid']);
     }
 
     public function attachVaccines(Dog $dog, $date = null): void

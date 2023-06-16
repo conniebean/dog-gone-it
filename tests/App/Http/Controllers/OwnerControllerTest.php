@@ -25,6 +25,12 @@ class OwnerControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_update_an_owner()
+    {
+        self::markTestSkipped();
+    }
+
+    /** @test */
     public function an_employee_can_not_remove_an_owner()
     {
         $employee = User::factory()->create();
