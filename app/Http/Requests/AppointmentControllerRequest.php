@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Dog;
 use App\Models\Facility;
 use Illuminate\Foundation\Http\FormRequest;
+use mysql_xdevapi\Collection;
 
 class AppointmentControllerRequest extends FormRequest
 {
@@ -37,6 +38,13 @@ class AppointmentControllerRequest extends FormRequest
             'appointment_date' => 'required|date|after_or_equal:today',
             'paid' => 'required|boolean'
         ];
+
+        //todo: what could go wrong with this?
+        if ($this->isMethod('PUT') || $this->isMethod('PATCH')){
+            return collect($validated)->map(function ($rule) {
+                return $rule . '|sometimes';
+            })->all();
+        }
 
         $dog = Dog::query()->where('id', $this->validationData()['dog_id'])->first();
 

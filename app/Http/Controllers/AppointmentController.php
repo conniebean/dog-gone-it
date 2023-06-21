@@ -34,7 +34,7 @@ class AppointmentController extends Controller
 
     public function update(AppointmentControllerRequest $request, $id)
     {
-        //todo: how to only update 1 thing minimum?
+        dump('update', $request->all());
         $appointment = Appointment::findOrFail($id);
         $appointment->update($request->all());
         $appointment->save();

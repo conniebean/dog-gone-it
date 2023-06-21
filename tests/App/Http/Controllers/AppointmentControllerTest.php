@@ -139,7 +139,6 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_can_update_an_existing_appointment()
     {
-        self::markTestSkipped();
         $appointment = Appointment::factory()->create([
             'appointment_date' => $this->date->toDateString(),
             'facility_id' => $this->facility->id,
