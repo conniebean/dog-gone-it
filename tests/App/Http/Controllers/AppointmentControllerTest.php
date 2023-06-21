@@ -33,7 +33,8 @@ class AppointmentControllerTest extends TestCase
     public function it_can_add_a_dog_to_the_daycare()
     {
         $this->withoutExceptionHandling();
-        $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
+        $appointment = $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
+        dump($appointment);
 
         $this->assertDatabaseHas('appointments', ['dog_id' => $this->dog->id]);
 

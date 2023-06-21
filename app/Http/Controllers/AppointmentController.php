@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AppointmentControllerRequest;
+use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
@@ -21,10 +22,7 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
 
-        //create an appointment resource with a function that returns an array of params that we want
-
-        //return AppointmentResource::make(Appointment::create($validated));
-        return Appointment::create($validated);
+        return AppointmentResource::make(Appointment::create($validated));
     }
 
     public function show(Daycare $daycare)
