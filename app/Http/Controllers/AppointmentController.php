@@ -14,13 +14,15 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        //todo: find out how to index all appointments on a single date
         return Appointment::all();
     }
 
     public function store(AppointmentControllerRequest $request)
     {
         $validated = $request->validated();
+
+        //todo: send our mail in here
+        //https://laravel.com/docs/9.x/mail#generating-markdown-mailables
 
         return AppointmentResource::make(Appointment::create($validated));
     }
