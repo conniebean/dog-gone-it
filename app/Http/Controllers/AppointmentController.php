@@ -12,7 +12,8 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        return Appointment::all();
+        //query scope, have it default to today
+        //return Appointment::all();
     }
 
     public function store(StoreAppointmentRequest $request)
