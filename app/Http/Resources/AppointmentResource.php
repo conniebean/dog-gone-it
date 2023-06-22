@@ -9,12 +9,7 @@ class AppointmentResource extends JsonResource
     public bool $preserveKeys = true;
 
     public static $wrap = 'appointment';
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
+
     public function toArray($request)
     {
         return [

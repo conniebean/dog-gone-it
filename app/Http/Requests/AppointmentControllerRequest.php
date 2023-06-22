@@ -29,8 +29,8 @@ class AppointmentControllerRequest extends FormRequest
     public function rules()
     {
         $validated = [
-            'dog_id' => 'required|string',
-            'facility_id' => 'required|string',
+            'dog_id' => 'required|integer',
+            'facility_id' => 'required|integer',
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
             'check_in' => 'date',
@@ -39,7 +39,7 @@ class AppointmentControllerRequest extends FormRequest
             'paid' => 'required|boolean'
         ];
 
-        //todo: what could go wrong with this?
+        //todo: add an update appointment form request and use that instead
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')){
             return collect($validated)->map(function ($rule) {
                 return $rule . '|sometimes';

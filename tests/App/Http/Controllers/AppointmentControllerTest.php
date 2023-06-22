@@ -146,11 +146,10 @@ class AppointmentControllerTest extends TestCase
 
         $this->assertEquals(0, $appointment['paid']);
 
-        $this->actingAs($this->employee)->put(route('appointment.update', [
-            'appointmentId' => $appointment->id
-        ]), [
+        $this->actingAs($this->employee)->put(route('appointment.update', $appointment),
+            $this->baseUpdateAppointment($this->dog, $this->date->toDateString(), [
                 'paid' => true
-            ])->assertSuccessful();
+            ]))->assertSuccessful();
 
         $appointment->refresh();
 
@@ -180,5 +179,20 @@ class AppointmentControllerTest extends TestCase
                 'paid' => false
             ])
         );
+    }
+
+    public function baseUpdateAppointment($dog, $date, $attributes = []): array
+    {
+        $appointmentStuff = [
+            'dog_id' => $dog->id,
+            'facility_id' => $this->facility->id,
+            'appointmentable_id' => 1,
+            'appointmentable_type' => Daycare::class,
+            'check_in' => $this->date->subHour(),
+            'check_out' => $this->date->addHour(),
+            'appointment_date' => $date,
+            'paid' => false
+        ];
+        return array_merge($appointmentStuff, $attributes);
     }
 }

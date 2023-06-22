@@ -20,7 +20,6 @@ class DogFactory extends Factory
     {
         $owners = Owner::all();
         return [
-            'id' => $this->faker->unique()->randomNumber(),
             'name' => $this->faker->name(),
             'breed' => $this->faker->randomElement(Dog::BREEDS),
             'sex' => $this->faker->randomElement(Dog::GENDER),

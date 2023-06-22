@@ -45,7 +45,7 @@ Route::prefix('appointment')->group(function(){
     Route::get('index', AppointmentController::class . '@index')->name('appointment.index');
     Route::post('store', AppointmentController::class . '@store')->name('appointment.store');
     Route::delete('delete/{appointmentId}', AppointmentController::class . '@delete')->name('appointment.delete');
-    Route::put('update/{appointmentId}', AppointmentController::class . '@update')->name('appointment.update');
+    Route::put('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
     //add index routes
 });
 
