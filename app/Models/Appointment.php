@@ -30,9 +30,9 @@ class Appointment extends Model
         return $this->belongsTo(Facility::class, 'facility_id', 'id');
     }
 
-    public function dog(): HasOne
+    public function dog(): BelongsTo
     {
-        return $this->hasOne(Dog::Class);
+        return $this->belongsTo(Dog::Class);
     }
 
     public function daycare(): MorphTo

@@ -19,10 +19,9 @@ class AppointmentFactory extends Factory
      */
     public function definition()
     {
-        $dog = Dog::count() ? Dog::all() : Dog::factory(3)->create();
         return [
-            'dog_id' => $dog->random()->id,
-            'facility_id' => fn () => Facility::factory()->create(),
+            'dog_id' => Dog::factory(),
+            'facility_id' => Facility::factory(),
             //todo: figure out how 'appointmentable_id' works and change it
             'appointmentable_id' => 1,
             //todo: after daycare appt type is working, figure out how to make

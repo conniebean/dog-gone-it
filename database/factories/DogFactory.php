@@ -18,13 +18,12 @@ class DogFactory extends Factory
      */
     public function definition()
     {
-        $owners = Owner::all();
         return [
             'name' => $this->faker->name(),
             'breed' => $this->faker->randomElement(Dog::BREEDS),
             'sex' => $this->faker->randomElement(Dog::GENDER),
             'date_of_birth' => $this->faker->date(),
-            'owner_id' => $owners->random()->id,
+            'owner_id' => Owner::factory(),
             'fixed' => $this->faker->boolean()
         ];
     }

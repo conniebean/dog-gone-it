@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AppointmentControllerRequest;
+use App\Http\Requests\Appointment\StoreAppointmentRequest;
+use App\Http\Requests\Appointment\UpdateAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Models\Daycare;
-use App\Models\Dog;
-use App\Models\Facility;
-use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
@@ -17,7 +15,7 @@ class AppointmentController extends Controller
         return Appointment::all();
     }
 
-    public function store(AppointmentControllerRequest $request)
+    public function store(StoreAppointmentRequest $request)
     {
         $validated = $request->validated();
 
@@ -32,15 +30,15 @@ class AppointmentController extends Controller
         //
     }
 
-    public function update(AppointmentControllerRequest $request, Appointment $appointment)
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
-        $appointment->update($request->all());
-        $appointment->save();
+        $appointment->update($request->validated());
+        return response()->json(AppointmentResource::make($appointment));
     }
 
-    public function delete($id)
+    public function delete(Appointment $appointment)
     {
-        $appointment = Appointment::find($id);
         $appointment->delete();
+        return response()->json([], 204);
     }
 }

@@ -54,7 +54,8 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
-        $this->postToDaycare($this->dog, $this->date->subMonth()->toDateString())->assertInvalid();
+        $this->postToDaycare($this->dog, $this->date->subMonth()->toDateString())
+            ->assertJsonFragment(['message' => "Daycare-date must be today or a date in the future."]);
 
         $this->assertDatabaseMissing('appointments', ['dog_id' => $this->dog->id]);
     }
@@ -129,7 +130,7 @@ class AppointmentControllerTest extends TestCase
 
         $this->actingAs($this->employee)->delete
         (route('appointment.delete', $appointmentToDelete->id))
-            ->assertSuccessful();
+            ->assertNoContent();
 
         $this->assertDatabaseMissing('appointments', ['dog_id' => $newDog->id, 'id' => $appointmentToDelete->id]);
         $this->assertEquals(5, Appointment::all()->count());
@@ -139,6 +140,7 @@ class AppointmentControllerTest extends TestCase
     public function it_can_update_an_existing_appointment()
     {
         $appointment = Appointment::factory()->create([
+            'dog_id' => $this->dog->id,
             'appointment_date' => $this->date->toDateString(),
             'facility_id' => $this->facility->id,
             'paid' => false
@@ -147,9 +149,9 @@ class AppointmentControllerTest extends TestCase
         $this->assertEquals(0, $appointment['paid']);
 
         $this->actingAs($this->employee)->put(route('appointment.update', $appointment),
-            $this->baseUpdateAppointment($this->dog, $this->date->toDateString(), [
+            $this->baseUpdateAppointment($appointment->dog, $this->date->toDateString(), [
                 'paid' => true
-            ]))->assertSuccessful();
+            ]))->assertOk();
 
         $appointment->refresh();
 
@@ -167,7 +169,7 @@ class AppointmentControllerTest extends TestCase
 
     public function postToDaycare($dog, $date): TestResponse
     {
-        return $this->actingAs($this->employee)->post(
+        return $this->actingAs($this->employee)->postJson(
             route('appointment.store', [
                 'dog_id' => $dog->id,
                 'facility_id' => $this->facility->id,

@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('owner')->group(function () {
     Route::get('index', OwnerController::class . '@index')->name('owner.index');
     Route::post('store', OwnerController::class . '@store')->name('owner.store');
-    Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware('admin');
+    Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware(['admin', 'auth']);
     Route::delete('{id}/dogs/{dogId}', DogController::class . '@delete')->name('dog.delete');
 });
 
@@ -35,16 +35,16 @@ Route::prefix('dog')->group(function (){
 });
 
 Route::prefix('employee')->group(function() {
-    Route::post('create', UserController::class . '@store')->name('employee.create')->middleware('admin');
-    Route::put('update/{id}', UserController::class . '@update')->name('employee.update')->middleware('admin');
-    Route::delete('delete/{userId}', UserController::class . '@delete')->name('employee.delete')->middleware('admin');
-    Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware('admin');
+    Route::post('create', UserController::class . '@store')->name('employee.create')->middleware(['admin', 'auth']);
+    Route::put('update/{id}', UserController::class . '@update')->name('employee.update')->middleware(['admin', 'auth']);
+    Route::delete('delete/{userId}', UserController::class . '@delete')->name('employee.delete')->middleware(['admin', 'auth']);
+    Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware(['admin', 'auth']);
 });
 
 Route::prefix('appointment')->group(function(){
     Route::get('index', AppointmentController::class . '@index')->name('appointment.index');
     Route::post('store', AppointmentController::class . '@store')->name('appointment.store');
-    Route::delete('delete/{appointmentId}', AppointmentController::class . '@delete')->name('appointment.delete');
+    Route::delete('delete/{appointment}', AppointmentController::class . '@delete')->name('appointment.delete');
     Route::put('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
     //add index routes
 });
