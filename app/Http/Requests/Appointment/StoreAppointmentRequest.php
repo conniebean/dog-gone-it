@@ -5,6 +5,7 @@ namespace App\Http\Requests\Appointment;
 use App\Models\Appointment;
 use App\Models\Dog;
 use App\Rules\DaycareHasCapacity;
+use App\Rules\DogAlreadyInDaycare;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreAppointmentRequest extends FormRequest
@@ -17,7 +18,7 @@ class StoreAppointmentRequest extends FormRequest
     public function rules()
     {
         $validated = [
-            'dog_id' => 'required|integer',
+            'dog_id' => ['required', 'integer', new DogAlreadyInDaycare($this->validationData()['dog_id'])],
             'facility_id' => ['required', 'integer',],
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
