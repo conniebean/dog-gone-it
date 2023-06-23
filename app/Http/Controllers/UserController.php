@@ -2,39 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        //todo: custom form request for this
-        $validated = $request->validate([
-            'name' => 'required|string|max:30',
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required',
-            'role_id' => 'required'
-        ]);
-
-        return User::create($validated);
+        return User::create($request->validated());
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateEmployeeRequest $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:30',
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required',
-            'role_id' => 'required'
-        ]);
-        $user = User::findOrFail($id);
-
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->password = $validated['password'];
-        $user->role_id = $validated['role_id'];
-        $user->save();
+        return User::findOrFail($id)->update($request->validated());
     }
 
     public function delete($userId)
