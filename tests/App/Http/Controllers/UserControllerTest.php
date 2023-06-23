@@ -75,9 +75,9 @@ class UserControllerTest extends TestCase
     /** @test */
     public function an_admin_can_update_an_employee()
     {
-        $this->withoutExceptionHandling();
         $originalEmployee = User::factory()->create([
-            'name' => 'original name'
+            'name' => 'original name',
+            'email' => 'snickers@foobar.com',
         ]);
 
         $this->actingAs($this->admin)->put(route('employee.update', [
