@@ -77,7 +77,8 @@ class UserControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $originalEmployee = User::factory()->create([
-            'name' => 'original name'
+            'name' => 'original name',
+            'email' => 'snickers@foobar.com',
         ]);
 
         $this->actingAs($this->admin)->put(route('employee.update', [
