@@ -18,7 +18,7 @@ class DogAlreadyInDaycare implements Rule
     {
         return Appointment::query()
             ->where('dog_id', $value)
-            ->where('appointment_date', $this->appointment_date)->exists();
+            ->where('appointment_date', $this->appointment_date)->doesntExist();
     }
 
     public function message(): string

@@ -18,7 +18,7 @@ class StoreAppointmentRequest extends FormRequest
     public function rules()
     {
         $validated = [
-            'dog_id' => ['required', 'integer', new DogAlreadyInDaycare($this->validationData()['dog_id'])],
+            'dog_id' => ['required', 'integer', new DogAlreadyInDaycare($this->validationData()['appointment_date'])],
             'facility_id' => ['required', 'integer',],
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
@@ -31,16 +31,16 @@ class StoreAppointmentRequest extends FormRequest
 
         $dog = Dog::query()->where('id', $this->validationData()['dog_id'])->firstOrFail();
 
-        $alreadyInDaycare = Appointment::query()
-            ->where('dog_id', $dog->id)
-            ->where('appointment_date', $this->validationData()['appointment_date'])->exists();
+//        $alreadyInDaycare = Appointment::query()
+//            ->where('dog_id', $dog->id)
+//            ->where('appointment_date', $this->validationData()['appointment_date'])->exists();
 
         if(!$dog->isUpToDate()){
             abort(422, 'The vaccines for this pet are out of date, or they do not have all the required vaccines! They cannot come to daycare.');
         }
-        if($alreadyInDaycare){
-            abort(422, 'Dog already in daycare for the day.');
-        }
+//        if($alreadyInDaycare){
+//            abort(422, 'Dog already in daycare for the day.');
+//        }
 
         return $validated;
     }
