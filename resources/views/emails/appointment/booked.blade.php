@@ -1,10 +1,10 @@
 <x-mail::message>
-# Introduction
+# Appointment Booked
 
-The body of your message.
+Appointment has been successfully booked!.
 
 <x-mail::button :url="''">
-Button Text
+Do we need this button?
 </x-mail::button>
 
 Thanks,<br>
