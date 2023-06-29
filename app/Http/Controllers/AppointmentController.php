@@ -22,10 +22,10 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
 
-        $appointment = AppointmentResource::make(Appointment::create($validated));
+        $appointment = Appointment::create($validated);
         Mail::to($appointment->dog->owner->email)->send(new AppointmentBooked($appointment));
 
-        return $appointment;
+        return AppointmentResource::make($appointment);
     }
 
     public function show(Daycare $daycare)

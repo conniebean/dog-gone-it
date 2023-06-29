@@ -10,19 +10,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 class AppointmentBooked extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private AppointmentResource $appointment;
+    private Appointment $appointment;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(AppointmentResource $appointment)
+    public function __construct(Appointment $appointment)
     {
         $this->appointment = $appointment;
     }
@@ -48,7 +49,10 @@ class AppointmentBooked extends Mailable
     {
         return new Content(
             markdown: 'emails.appointment.booked',
-            with: ['appointment' => $this->appointment]
+            with: [
+                'appointment' => $this->appointment,
+                'url' => URL::signedRoute('appointment.details', ['appointment' => $this->appointment->id])
+            ]
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,10 @@ class Appointment extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'appointment_date' => 'datetime:Y-m-d'
+    ];
 
     public const APPOINTMENT_TYPES = [
         'daycare',

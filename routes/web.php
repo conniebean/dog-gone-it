@@ -33,6 +33,10 @@ Route::get('/', function () {
     Route::get('/dogs', [DogController::class, 'show']);
 //});
 
+Route::get('/appointment/{appointment}/details', function () {
+    dd('here');
+})->name('appointment.details')->middleware(['signed']);
+
 //Route::get('/dashboard', function () {
 //    return Inertia::render('Dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
