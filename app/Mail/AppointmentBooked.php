@@ -48,6 +48,7 @@ class AppointmentBooked extends Mailable
     {
         return new Content(
             markdown: 'emails.appointment.booked',
+            with: ['appointment' => $this->appointment]
         );
     }
 

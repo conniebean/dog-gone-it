@@ -43,13 +43,15 @@ class AppointmentControllerTest extends TestCase
     public function it_sends_a_confirmation_email_upon_successful_appointment_booking()
     {
         Mail::fake();
-        $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
-        Mail::send(\App\Mail\AppointmentBooked::class);
-        Mail::assertSent(\App\Mail\AppointmentBooked::class, function ($mail) {
-            dump($mail);
-            $this->assertTrue($mail->hasTo($this->owner->email));
-        });
+        $owner = Owner::factory()->create();
+        $dog = Dog::factory()->create(['owner_id' => $owner->id]);
+        $this->attachVaccines($dog, $this->vaccineExpiryDate->toDateString());
 
+        $this->postToDaycare($dog, $this->date->toDateString());
+
+        Mail::assertSent(AppointmentBooked::class, function ($mail) use ($owner){
+            return $mail->hasTo($owner->email);
+        });
     }
 
     /** @test */
