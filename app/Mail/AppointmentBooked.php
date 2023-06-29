@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Http\Resources\AppointmentResource;
+use App\Models\Appointment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -13,14 +15,16 @@ class AppointmentBooked extends Mailable
 {
     use Queueable, SerializesModels;
 
+    private AppointmentResource $appointment;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AppointmentResource $appointment)
     {
-        //
+        $this->appointment = $appointment;
     }
 
     /**
@@ -44,6 +48,7 @@ class AppointmentBooked extends Mailable
     {
         return new Content(
             markdown: 'emails.appointment.booked',
+            with: ['appointment' => $this->appointment]
         );
     }
 

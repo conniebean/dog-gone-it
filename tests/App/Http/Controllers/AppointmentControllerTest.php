@@ -2,6 +2,7 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\Mail\AppointmentBooked;
 use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
@@ -10,6 +11,7 @@ use App\Models\Owner;
 use App\Models\User;
 use App\Models\Vaccine;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -35,8 +37,21 @@ class AppointmentControllerTest extends TestCase
         $this->postToDaycare($this->dog, $this->date->toDateString())->assertSuccessful();
 
         $this->assertDatabaseHas('appointments', ['dog_id' => $this->dog->id]);
+    }
 
-        //TODO: dispatch confirmation email to owner
+    /** @test */
+    public function it_sends_a_confirmation_email_upon_successful_appointment_booking()
+    {
+        Mail::fake();
+        $owner = Owner::factory()->create();
+        $dog = Dog::factory()->create(['owner_id' => $owner->id]);
+        $this->attachVaccines($dog, $this->vaccineExpiryDate->toDateString());
+
+        $this->postToDaycare($dog, $this->date->toDateString());
+
+        Mail::assertSent(AppointmentBooked::class, function ($mail) use ($owner){
+            return $mail->hasTo($owner->email);
+        });
     }
 
     /** @test */

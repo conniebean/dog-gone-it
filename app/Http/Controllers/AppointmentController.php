@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Appointment\StoreAppointmentRequest;
 use App\Http\Requests\Appointment\UpdateAppointmentRequest;
 use App\Http\Resources\AppointmentResource;
+use App\Mail\AppointmentBooked;
 use App\Models\Appointment;
 use App\Models\Daycare;
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
@@ -20,10 +22,10 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
 
-        //todo: send our mail in here
-        //https://laravel.com/docs/9.x/mail#generating-markdown-mailables
+        $appointment = AppointmentResource::make(Appointment::create($validated));
+        Mail::to($appointment->dog->owner->email)->send(new AppointmentBooked($appointment));
 
-        return AppointmentResource::make(Appointment::create($validated));
+        return $appointment;
     }
 
     public function show(Daycare $daycare)
