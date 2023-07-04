@@ -8,17 +8,19 @@ use App\Http\Resources\AppointmentResource;
 use App\Mail\AppointmentBooked;
 use App\Models\Appointment;
 use App\Models\Daycare;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
     public function index()
     {
-        //query scope, have it default to today
-        //return Appointment::all();
+        //if date selected is not today, filter appointments by that specific date
+        //otherwise, default to today
+        return Appointment::today()->get();
     }
 
-    public function store(StoreAppointmentRequest $request)
+    public function store(StoreAppointmentRequest $request): AppointmentResource
     {
         $validated = $request->validated();
 
@@ -33,13 +35,13 @@ class AppointmentController extends Controller
         //
     }
 
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment): JsonResponse
     {
         $appointment->update($request->validated());
         return response()->json(AppointmentResource::make($appointment));
     }
 
-    public function delete(Appointment $appointment)
+    public function delete(Appointment $appointment): JsonResponse
     {
         $appointment->delete();
         return response()->json([], 204);

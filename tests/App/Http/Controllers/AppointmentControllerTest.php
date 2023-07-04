@@ -57,13 +57,14 @@ class AppointmentControllerTest extends TestCase
     /** @test */
     public function it_can_show_the_list_of_daycare_appointments_for_a_single_day()
     {
-        self::markTestSkipped();
-        //make a ton of appointments for today
-        //make a ton of appointments for another day
+        $appointments = Appointment::factory(10)->sequence(
+            ['appointment_date' => Carbon::today()],
+            ['appointment_date' => Carbon::tomorrow()]
+        )->create();
 
-        //hit our index route
+        $appointments->fresh();
 
-        //assert that we see all the appointments for today and not another day
+        $this->assertEquals(5, Appointment::today()->get()->count());
     }
 
     /** @test */
