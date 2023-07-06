@@ -43,15 +43,31 @@ class AppointmentControllerTest extends TestCase
     public function it_sends_a_confirmation_email_upon_successful_appointment_booking()
     {
         Mail::fake();
-        $owner = Owner::factory()->create();
-        $dog = Dog::factory()->create(['owner_id' => $owner->id]);
+        $dog = Dog::factory()->create(['owner_id' => $this->owner]);
         $this->attachVaccines($dog, $this->vaccineExpiryDate->toDateString());
 
-        $this->postToDaycare($dog, $this->date->toDateString());
+        $this->postToDaycare($dog, $this->date->addWeek()->toDateString());
 
-        Mail::assertSent(AppointmentBooked::class, function ($mail) use ($owner){
-            return $mail->hasTo($owner->email);
+        Mail::assertSent(AppointmentBooked::class, function ($mail){
+            return $mail->hasTo($this->owner->email);
         });
+    }
+
+    /** @test */
+    public function it_sends_a_reminder_notification_email_24_hours_before_an_appointment()
+    {
+        Mail::fake();
+
+        $dog = Dog::factory()->create(['owner_id' => $this->owner]);
+        $this->attachVaccines($dog, $this->vaccineExpiryDate->toDateString());
+
+        Appointment::factory(10)->sequence(
+            ['appointment_date' => $this->date->addDay()->toDateString()],
+            ['appointment_date' => $this->date->addWeek()->toDateString()],
+        )->create();
+
+        Mail::assertSent(AppointmentReminder::class, 5);
+
     }
 
     /** @test */
