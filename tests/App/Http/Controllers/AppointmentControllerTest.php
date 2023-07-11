@@ -2,7 +2,9 @@
 
 namespace Tests\App\Http\Controllers;
 
+use App\Jobs\SendReminderEmail;
 use App\Mail\AppointmentBooked;
+use App\Mail\AppointmentReminder;
 use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
@@ -11,6 +13,7 @@ use App\Models\Owner;
 use App\Models\User;
 use App\Models\Vaccine;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -57,28 +60,25 @@ class AppointmentControllerTest extends TestCase
     public function it_sends_a_reminder_notification_email_24_hours_before_an_appointment()
     {
         Mail::fake();
-
-        $dog = Dog::factory()->create(['owner_id' => $this->owner]);
-        $this->attachVaccines($dog, $this->vaccineExpiryDate->toDateString());
+        Event::fake();
 
         Appointment::factory(10)->sequence(
             ['appointment_date' => $this->date->addDay()->toDateString()],
             ['appointment_date' => $this->date->addWeek()->toDateString()],
         )->create();
 
-        Mail::assertSent(AppointmentReminder::class, 5);
+        SendReminderEmail::dispatch();
 
+        Mail::assertSent(AppointmentReminder::class, 5);
     }
 
     /** @test */
     public function it_can_show_the_list_of_daycare_appointments_for_a_single_day()
     {
-        $appointments = Appointment::factory(10)->sequence(
+        Appointment::factory(10)->sequence(
             ['appointment_date' => Carbon::today()],
             ['appointment_date' => Carbon::tomorrow()]
         )->create();
-
-        $appointments->fresh();
 
         $this->assertEquals(5, Appointment::today()->get()->count());
     }
