@@ -8,8 +8,10 @@ use App\Http\Resources\AppointmentResource;
 use App\Mail\AppointmentBooked;
 use App\Models\Appointment;
 use App\Models\Daycare;
+use App\Models\Dog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class AppointmentController extends Controller
 {
@@ -17,7 +19,9 @@ class AppointmentController extends Controller
     {
         //if date selected is not today, filter appointments by that specific date
         //otherwise, default to today
-        return Appointment::today()->get();
+        return Inertia::render('Appointments/Daycare', [
+            'appointments' => Appointment::today()->with('dog')->get(),
+        ]);
     }
 
     public function store(StoreAppointmentRequest $request): AppointmentResource

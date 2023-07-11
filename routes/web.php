@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DogController;
 use App\Http\Controllers\OwnerController;
 use App\Models\Dog;
@@ -29,16 +30,20 @@ Route::get('/', function () {
 
 //Route::inertia('/home', "Home")->middleware(['auth', 'verified']);
 
-//Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dogs', [DogController::class, 'show']);
-//});
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/appointment/index', [AppointmentController::class, 'index']);
+});
 
 Route::get('/appointment/{appointment}/details', function () {
     dd('here');
 })->name('appointment.details')->middleware(['signed']);
 
-//Route::get('/dashboard', function () {
-//    return Inertia::render('Dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
