@@ -1,10 +1,13 @@
 <script setup>
-defineProps(['appointments', 'dogs']);
+import NavLink from "@/Components/NavLink.vue";
+
+defineProps(['appointments']);
 </script>
 
 <template>
+    <NavLink></NavLink>
     <div class="overflow-x-auto">
-        <table class="table table-xs table-pin-rows table-pin-cols">
+        <table class="table table-sm table-pin-rows table-pin-cols justify-items-center">
             <thead>
             <tr>
                 <td>Dog</td>
@@ -18,9 +21,10 @@ defineProps(['appointments', 'dogs']);
             <tbody>
             <tr v-for="appointment in appointments">
                 <td>{{ appointment.dog.name }}</td>
+                <td>{{ appointment.visit_type }}</td>
                 <td>{{ appointment.check_in }}</td>
                 <td>{{ appointment.check_out }}</td>
-                <td><input type="checkbox" checked="checked" class="checkbox checkbox-xs" /></td>
+                <td><input type="checkbox" checked="checked" class="checkbox checkbox-xs"/></td>
             </tr>
             </tbody>
             <tfoot>
