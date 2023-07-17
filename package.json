@@ -28,6 +28,8 @@
         "vue-loader": "^16.8.3"
     },
     "dependencies": {
+        "@vue/test-utils": "^2.4.0",
+        "jsdom": "^22.1.0",
         "node": "^19.4.0"
     }
 }
