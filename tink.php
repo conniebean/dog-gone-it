@@ -1,15 +1,16 @@
 <?php
 
 use App\Http\Resources\AppointmentResource;
+use App\Jobs\SendReminderEmail;
 use App\Models\Appointment;
 use App\Models\Dog;
 use App\Models\Owner;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-$owner = Owner::factory()->create(['name' => 'Connie', 'email' => 'conniejeankennedy@gmail.com']);
+Appointment::factory(3)->sequence(
+    ['appointment_date' => Carbon::now()->addDay()->toDateString()],
+    ['appointment_date' => Carbon::now()->addWeek()->toDateString()],
+)->create();
 
-$dog = Dog::factory()->create(['name' => 'Midna', 'owner_id' => $owner->id]);
-
-$appointment = Appointment::factory()->create(['dog_id' => $dog->id]);
-
-Mail::to($owner->email)->send(new \App\Mail\AppointmentBooked($appointment));
+SendReminderEmail::dispatch();

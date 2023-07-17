@@ -10,6 +10,7 @@ use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
@@ -19,8 +20,9 @@ class AppointmentController extends Controller
     {
         //if date selected is not today, filter appointments by that specific date
         //otherwise, default to today
+
         return Inertia::render('Appointments/Daycare', [
-            'appointments' => Appointment::today()->with('dog')->get(),
+            'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog')->get(),
         ]);
     }
 

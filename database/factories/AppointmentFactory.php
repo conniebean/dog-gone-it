@@ -26,7 +26,7 @@ class AppointmentFactory extends Factory
             'appointmentable_id' => 1,
             //todo: after daycare appt type is working, figure out how to make
             //  random selection of appt type.
-            'appointmentable_type' => Daycare::class,
+            'appointmentable_type' => (new Daycare())->getMorphClass(),
             'appointment_date' => $this->faker->dateTimeBetween('now', '+1 month'),
             'paid' => $this->faker->boolean
         ];

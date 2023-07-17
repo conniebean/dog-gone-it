@@ -19,8 +19,6 @@ class AppointmentReminder extends Mailable
     public function __construct(Appointment $appointment)
     {
         $this->appointment = $appointment;
-
-        dump($appointment);
     }
 
     public function envelope()

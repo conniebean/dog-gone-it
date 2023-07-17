@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Facility;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,8 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         (new RoleSeeder())->run();
         (new UserSeeder())->run();
+        (new FacilitySeeder())->run();
         (new OwnerSeeder())->run();
-        (new DogSeeder())->run();
         (new VaccineSeeder())->run();
+        (new DogSeeder())->run();
+        (new AppointmentSeeder())->run();
     }
 }

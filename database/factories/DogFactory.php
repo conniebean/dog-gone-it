@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Dog;
 use App\Models\Owner;
+use Database\Factories\Traits\DogNameRandomizer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class DogFactory extends Factory
 {
+    use DogNameRandomizer;
     /**
      * Define the model's default state.
      *
@@ -19,7 +21,7 @@ class DogFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->dogName(),
             'breed' => $this->faker->randomElement(Dog::BREEDS),
             'sex' => $this->faker->randomElement(Dog::GENDER),
             'date_of_birth' => $this->faker->date(),

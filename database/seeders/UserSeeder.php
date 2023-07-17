@@ -17,5 +17,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory(5)->create();
+        User::factory()->create([
+            'name' => 'Connie Kennedy',
+            'email' => 'c.kennedy@doggoneit.com',
+            'password' => 'password',
+            'role_id' => 2
+        ]);
     }
 }

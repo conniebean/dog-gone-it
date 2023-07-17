@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Dog;
 use App\Models\Owner;
+use App\Models\Vaccine;
 use Illuminate\Database\Seeder;
 
 class DogSeeder extends Seeder
@@ -15,6 +16,12 @@ class DogSeeder extends Seeder
      */
     public function run()
     {
-        Dog::factory()->times(7)->create();
+        $dogs = Dog::factory(7)->create();
+
+        $vaccines = Vaccine::where('required', 1)->get();
+
+        $dogs->each(function ($dog) use ($vaccines){
+            $dog->vaccines()->attach($vaccines);
+        });
     }
 }
