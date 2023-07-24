@@ -14,12 +14,12 @@ trait FilterByDate
 
     public function scopeTomorrow($query)
     {
-        return $query->where('appointment_date', Carbon::tomorrow());
+        return $query->whereBetween('appointment_date', [Carbon::tomorrow()->startOfDay(), Carbon::tomorrow()->endOfDay()]);
     }
 
     public function scopeYesterday($query)
     {
-        return $query->where('appointment_date', Carbon::yesterday());
+        return $query->whereBetween('appointment_date', [Carbon::yesterday()->startOfDay(), Carbon::yesterday()->endOfDay()]);
     }
 
     public function scopeAppointmentType($query, $type)

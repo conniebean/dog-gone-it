@@ -6,6 +6,9 @@ defineProps({
     appointments: {
         type: Array,
         default: () => [],
+    },
+    visitTypes: {
+        type: Array
     }
 });
 </script>
@@ -26,7 +29,7 @@ defineProps({
             </thead>
             <tbody>
             <tr v-for="appointment in appointments" :key="appointment.id">
-                <Appointment :appointment="appointment"/>
+                <Appointment :appointment="appointment" :visit-types="visitTypes"/>
             </tr>
             </tbody>
         </table>

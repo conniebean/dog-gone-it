@@ -21,8 +21,8 @@ class Daycare extends Model
 //    public const MAX_OCCUPANCY = 20;
 
     public const VISIT_TYPE = [
-        'half-day' => 'half-day',
-        'full-day' => 'full-day'
+        'half-day',
+        'full-day'
     ];
 
     public function dogs(): HasMany

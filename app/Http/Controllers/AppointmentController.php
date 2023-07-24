@@ -20,9 +20,9 @@ class AppointmentController extends Controller
     {
         //if date selected is not today, filter appointments by that specific date
         //otherwise, default to today
-
         return Inertia::render('Appointments/Daycare', [
             'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog')->get(),
+            'visitTypes' => Appointment::daycareVisitTypes()
         ]);
     }
 

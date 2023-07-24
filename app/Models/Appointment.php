@@ -20,12 +20,6 @@ class Appointment extends Model
         'appointment_date' => 'datetime:Y-m-d'
     ];
 
-    public const APPOINTMENT_TYPES = [
-        'daycare',
-        'grooming',
-        'boarding'
-    ];
-
     public function appointmentable(): MorphTo
     {
         return $this->morphTo();
@@ -44,6 +38,11 @@ class Appointment extends Model
     public function daycare(): MorphTo
     {
         return $this->morphTo(Daycare::class, 'appointmentable_type', 'appointmentable_id');
+    }
+
+    public static function daycareVisitTypes(): array
+    {
+        return Daycare::VISIT_TYPE;
     }
 //      TODO: bring these in later when daycare works
 //    public function grooming(): MorphTo
