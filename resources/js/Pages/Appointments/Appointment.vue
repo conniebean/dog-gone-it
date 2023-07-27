@@ -15,9 +15,8 @@ defineProps({
     <td>
         <details class="dropdown my-8">
             <summary class="m-1 btn btn-xs">Select One</summary>
-            <ul v-for="type in visitTypes"
-                class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-                <li><a>{{ type }}</a></li>
+            <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                <li v-for="type in visitTypes"><a>{{ type }}</a></li>
             </ul>
         </details>
     </td>

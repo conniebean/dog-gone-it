@@ -32,8 +32,10 @@ class SendReminderEmail implements ShouldQueue
      */
     public function handle()
     {
-        Appointment::tomorrow()->get()->each(function ($appointment) {
-            Mail::to($appointment->dog->owner->email)->send(new AppointmentReminder($appointment));
+        Appointment::tomorrow()->chunkById(50, function ($appointments) {
+            $appointments->each(function ($appointment) {
+                Mail::to($appointment->dog->owner->email)->send(new AppointmentReminder($appointment));
+            });
         });
     }
 }
