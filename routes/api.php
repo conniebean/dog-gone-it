@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\BoardingController;
 use App\Http\Controllers\DaycareController;
 use App\Http\Controllers\DogController;
+use App\Http\Controllers\GroomingController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -41,10 +43,9 @@ Route::prefix('employee')->group(function() {
     Route::put('promote/{id}', UserController::class . '@promote')->name('employee.promote')->middleware(['admin', 'auth']);
 });
 
-Route::prefix('appointment')->group(function(){
-    Route::get('index', AppointmentController::class . '@index')->name('appointment.index');
+Route::prefix('appointments')->group(function(){
     Route::post('store', AppointmentController::class . '@store')->name('appointment.store');
     Route::delete('delete/{appointment}', AppointmentController::class . '@delete')->name('appointment.delete');
-    Route::put('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
+    Route::patch('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
 });
 

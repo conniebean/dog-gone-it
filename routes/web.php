@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\BoardingController;
+use App\Http\Controllers\DaycareController;
 use App\Http\Controllers\DogController;
+use App\Http\Controllers\GroomingController;
 use App\Http\Controllers\OwnerController;
 use App\Models\Dog;
 use Illuminate\Foundation\Application;
@@ -26,7 +29,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/appointment/index', [AppointmentController::class, 'index']);
+    Route::prefix('appointments')->group(function () {
+        Route::get('/daycare/index', [DaycareController::class, 'index']);
+        Route::get('/grooming/index', [GroomingController::class, 'index']);
+        Route::get('/boarding/index', [BoardingController::class, 'index']);
+    });
 });
 
 Route::get('/appointment/{appointment}/details', function () {

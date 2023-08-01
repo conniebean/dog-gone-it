@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DaycareController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return Inertia::render('Appointments/Daycare', [
+            'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog')->get(),
+            'visitTypes' => Appointment::daycareVisitTypes()
+        ]);
     }
 
     /**
