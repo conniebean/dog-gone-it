@@ -14,6 +14,7 @@ class UpdateAppointmentRequest extends FormRequest
             'facility_id' => ['required', 'integer',],
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
+            'visit_type' => 'string',
             'check_in' => 'date',
             'check_out' =>  'date',
             'appointment_date' => ['required', 'date', 'after_or_equal:today', new DaycareHasCapacity()],

@@ -21,6 +21,7 @@ class StoreAppointmentRequest extends FormRequest
             'facility_id' => ['required', 'integer',],
             'appointmentable_id' => 'required|integer',
             'appointmentable_type' => 'required|string',
+            'visit_type' => 'string',
             'check_in' => 'date',
             'check_out' => 'date',
             'appointment_date' => [

@@ -19,15 +19,6 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'name' => 'Connie',
-        'frameworks' => [
-            'Laravel', 'Vue', 'Inertia'
-        ]
-    ]);
-});
-
 //Route::inertia('/home', "Home")->middleware(['auth', 'verified']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
