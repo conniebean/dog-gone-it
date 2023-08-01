@@ -44,14 +44,23 @@ class Appointment extends Model
     {
         return Daycare::VISIT_TYPE;
     }
-//      TODO: bring these in later when daycare works
-//    public function grooming(): MorphTo
-//    {
-//        return $this->morphTo(self::SERVICES['grooming'], 'appointmentable_type', 'appointmentable_id');
-//    }
-//
-//    public function boarding(): MorphTo
-//    {
-//        return $this->morphTo(self::SERVICES['boarding'], 'appointmentable_type', 'appointmentable_id');
-//    }
+    public function grooming(): MorphTo
+    {
+        return $this->morphTo(Grooming::class, 'appointmentable_type', 'appointmentable_id');
+    }
+
+    public static function groomingVisitTypes(): array
+    {
+        return Grooming::VISIT_TYPE;
+    }
+
+    public function boarding(): MorphTo
+    {
+        return $this->morphTo(Boarding::class, 'appointmentable_type', 'appointmentable_id');
+    }
+
+    public static function boardingVisitTypes(): array
+    {
+        return Boarding::VISIT_TYPE;
+    }
 }

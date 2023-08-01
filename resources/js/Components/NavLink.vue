@@ -19,18 +19,18 @@ const classes = computed(() => props.active
                 </label>
                 <ul tabindex="0" class="menu menu-md dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-30">
                     <li></li>
-                    <li><Link href="/appointments/daycare">Daycare</Link></li>
-                    <li><Link href="/appointments/grooming">Grooming</Link></li>
-                    <li><Link href="/appointments/boarding">Boarding</Link></li>
+                    <li><Link href="/appointments/daycare/index">Daycare</Link></li>
+                    <li><Link href="/appointments/grooming/index">Grooming</Link></li>
+                    <li><Link href="/appointments/boarding/index">Boarding</Link></li>
                 </ul>
             </div>
             <a class="btn btn-ghost normal-case text-xl">Dog Gone It</a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><Link href="/pages/appointments/daycare">Daycare</Link></li>
-                <li><Link href="/pages/appointments/grooming">Grooming</Link></li>
-                <li><Link href="/pages/appointments/boarding">Boarding</Link></li>
+                <li><Link href="/appointments/daycare/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/daycare')}">Daycare</Link></li>
+                <li><Link href="/appointments/grooming/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/grooming')}">Grooming</Link></li>
+                <li><Link href="/appointments/boarding/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/boarding')}">Boarding</Link></li>
             </ul>
         </div>
         <div class="navbar-end">

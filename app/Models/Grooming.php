@@ -9,17 +9,16 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Daycare extends Model
+class Grooming extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    protected $table = 'daycare';
-
     public const VISIT_TYPE = [
-        'half-day',
-        'full-day'
+        'full-groom',
+        'bath-and-brush',
+        'nail-trim'
     ];
 
     public function dogs(): HasMany
