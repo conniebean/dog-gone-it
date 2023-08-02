@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps } from "vue";
-import {Link} from "@inertiajs/vue3";
+import {Inertia} from "@inertiajs/inertia";
 
 defineProps({
     appointment: {
@@ -11,18 +11,23 @@ defineProps({
         type: Array
     }
 });
+//todo: come back to figure this shit out
+function updateVisitType(){
+    const appointment = this;
+    Inertia.patch('appointment.update', appointment);
+}
 
 </script>
 
 <template>
     <td>{{ appointment.dog.name }}</td>
     <td v-if="!appointment.visit_type">
-        <details class="dropdown my-8">
+        <details class="dropdown dropdown-hover my-16">
             <summary class="m-1 btn btn-xs">Select One</summary>
             <ul
-                class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                class="p-2 shadow menu menu-dropdown-show dropdown-content z-[1] bg-base-100 rounded-box w-52">
                 <li v-for="type in visitTypes" :key="type">
-                    <Link :href="`/appointments/update/${appointment.id}`" method="patch" as="button">{{ type }}</Link>
+                    <button @click="updateVisitType">{{ type }}</button>
                 </li>
             </ul>
         </details>

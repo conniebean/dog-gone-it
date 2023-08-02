@@ -28,9 +28,27 @@ const classes = computed(() => props.active
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><Link href="/appointments/daycare/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/daycare')}">Daycare</Link></li>
-                <li><Link href="/appointments/grooming/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/grooming')}">Grooming</Link></li>
-                <li><Link href="/appointments/boarding/index" :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/boarding')}">Boarding</Link></li>
+                <li>
+                    <Link
+                        href="/appointments/daycare/index"
+                        :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/daycare')}">
+                        Daycare
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/appointments/grooming/index"
+                        :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/grooming')}">
+                        Grooming
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/appointments/boarding/index"
+                        :class="{'btn btn-outline py-4': $page.url.startsWith('/appointments/boarding')}">
+                        Boarding
+                    </Link>
+                </li>
             </ul>
         </div>
         <div class="navbar-end">
