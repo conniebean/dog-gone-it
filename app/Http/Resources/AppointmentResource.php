@@ -18,6 +18,7 @@ class AppointmentResource extends JsonResource
             'facility_id' => $this->facility_id,
             'appointmentable_id' => $this->appointmentable_id,
             'appointmentable_type' => $this->appointmentable_type,
+            'visit_type' => $this->visit_type,
             'check_in' => $this->check_in,
             'check_out' => $this->check_out,
             'appointment_date' => $this->appointment_date,

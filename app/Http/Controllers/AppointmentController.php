@@ -18,12 +18,7 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        //if date selected is not today, filter appointments by that specific date
-        //otherwise, default to today
-        return Inertia::render('Appointments/Daycare', [
-            'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog')->get(),
-            'visitTypes' => Appointment::daycareVisitTypes()
-        ]);
+        //
     }
 
     public function store(StoreAppointmentRequest $request): AppointmentResource
@@ -41,10 +36,10 @@ class AppointmentController extends Controller
         //
     }
 
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment): JsonResponse
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
     {
         $appointment->update($request->validated());
-        return response()->json(AppointmentResource::make($appointment));
+        return redirect()->back();
     }
 
     public function delete(Appointment $appointment): JsonResponse
