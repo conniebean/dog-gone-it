@@ -180,10 +180,10 @@ class AppointmentControllerTest extends TestCase
 
         $this->assertEquals(0, $appointment['paid']);
 
-        $this->actingAs($this->employee)->put(route('appointment.update', $appointment),
+        $this->actingAs($this->employee)->patch(route('appointment.update', $appointment),
             $this->baseUpdateAppointment($appointment->dog, $this->date->toDateString(), [
                 'paid' => true
-            ]))->assertOk();
+            ]))->assertRedirect();
 
         $appointment->refresh();
 
