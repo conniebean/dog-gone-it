@@ -8,9 +8,9 @@ use App\Models\Owner;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-Appointment::factory(3)->sequence(
+$taco =  Appointment::factory(3)->sequence(
     ['appointment_date' => Carbon::now()->addDay()->toDateString()],
     ['appointment_date' => Carbon::now()->addWeek()->toDateString()],
 )->create();
 
-SendReminderEmail::dispatch();
+dump($taco->toArray());

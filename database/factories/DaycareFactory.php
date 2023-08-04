@@ -19,7 +19,6 @@ class DaycareFactory extends Factory
     public function definition()
     {
         return [
-            //todo: should this just be on the appointments table?
             'visit_type' => $this->faker->randomElement(Daycare::VISIT_TYPE),
         ];
     }
