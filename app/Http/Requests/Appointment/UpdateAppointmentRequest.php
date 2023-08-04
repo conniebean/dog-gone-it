@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAppointmentRequest extends FormRequest
 {
-    public function rules()
+    public function rules(): array
     {
         $validated = [
             'facility_id' => 'integer',
