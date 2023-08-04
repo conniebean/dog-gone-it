@@ -53,9 +53,9 @@ const updatePayment = (paid) => {
     </select>
     <td>{{ appointment.check_in }}</td>
     <td>{{ appointment.check_out }}</td>
+        <!--  TODO: figure out the checkbox sheeayt      -->
     <td><input
         v-model="appointment.paid"
-        <!--  TODO: figure out the checkbox sheeayt      -->
         @checked="appointment.paid ? 'checked' : ''"
         class="checkbox checkbox-xs"
         @change="()=>updatePayment(props.appointment.paid)"/></td>
