@@ -36,10 +36,10 @@ class AppointmentController extends Controller
         //
     }
 
-    public function update(UpdateAppointmentRequest $request, Appointment $appointment)
+    public function update(UpdateAppointmentRequest $request, Appointment $appointment): JsonResponse
     {
         $appointment->update($request->validated());
-        return redirect()->back();
+        return response()->json(AppointmentResource::make($appointment));
     }
 
     public function delete(Appointment $appointment): JsonResponse

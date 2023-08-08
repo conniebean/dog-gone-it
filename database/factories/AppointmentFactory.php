@@ -22,17 +22,17 @@ class AppointmentFactory extends Factory
     public function definition()
     {
         $appointmentable_types = [
-            (new Daycare())->getMorphClass(),
-            (new Boarding())->getMorphClass(),
-            (new Grooming())->getMorphClass(),
+            ['morph' => (new Daycare())->getMorphClass(), 'class' => Daycare::class],
+            ['morph' => (new Boarding())->getMorphClass(), 'class' => Boarding::class],
+            ['morph' => (new Grooming())->getMorphClass(), 'class' => Grooming::class],
         ];
         $randomAppointment = $this->faker->randomElement($appointmentable_types);
         return [
             'dog_id' => Dog::factory(),
             'facility_id' => Facility::factory(),
-            //todo: figure out how 'appointmentable_id' works and change it
-            'appointmentable_id' => 1,
-            'appointmentable_type' => $randomAppointment,
+            'visit_type' => $this->faker->randomElement($randomAppointment['class']::VISIT_TYPE),
+            'appointmentable_id' => $randomAppointment['class']::factory(),
+            'appointmentable_type' => $randomAppointment['morph'],
             'appointment_date' => $this->faker->dateTimeBetween('now', '+1 month'),
             'paid' => $this->faker->boolean
         ];

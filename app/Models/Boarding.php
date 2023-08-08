@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Boarding extends Model
 {
     use HasFactory;
+    protected $table = 'boarding';
 
     protected $guarded = [];
-
     public const VISIT_TYPE = [
         '1-to-3-nights',
         '4-to-7-nights',

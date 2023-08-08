@@ -13,6 +13,8 @@ class Grooming extends Model
 {
     use HasFactory;
 
+    protected $table ='grooming';
+
     protected $guarded = [];
 
     public const VISIT_TYPE = [
