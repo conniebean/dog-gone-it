@@ -15,8 +15,8 @@ defineProps({
 
 <template>
     <NavLink/>
-    <div class="overflow-x-auto">
-        <table class="table table-sm table-pin-rows table-pin-cols justify-items-center">
+    <div class="overflow-x-auto px-48">
+        <table class="table table-md table-zebra table-pin-rows table-pin-cols justify-items-center">
             <thead>
             <tr>
                 <td>Dog</td>

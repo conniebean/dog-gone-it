@@ -39,24 +39,41 @@ const updatePayment = (paid) => {
     })
 }
 
+const cancelAppointment = function () {
+    fetch(`/api/appointments/delete/${props.appointment.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
 </script>
 
 <template>
-    <td>{{ appointment.dog.name }}</td>
-    <select
+    <td class="font-extrabold">{{ appointment.dog.name }}</td>
+    <td><select
         v-model="appointment.visit_type"
-        class="select w-full max-w-xs"
+        id="visitType"
+        class="select w-48 max-w-xs"
         @change="()=>updateVisitType(props.appointment.visit_type)"
     >
         <option disabled>Select One</option>
         <option v-for="type in visitTypes" :key="type">{{ type }}</option>
-    </select>
+    </select></td>
     <td>{{ appointment.check_in }}</td>
     <td>{{ appointment.check_out }}</td>
-        <!--  TODO: figure out the checkbox sheeayt      -->
+        <!--  TODO: figure out the checkbox sheeayt  -->
     <td><input
         v-model="appointment.paid"
         @checked="appointment.paid ? 'checked' : ''"
         class="checkbox checkbox-xs"
         @change="()=>updatePayment(props.appointment.paid)"/></td>
+    <td>
+        <button class="btn btn-active" @click="()=>cancelAppointment()">
+            Cancel
+        </button>
+    </td>
 </template>
