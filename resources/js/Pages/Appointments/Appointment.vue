@@ -26,6 +26,32 @@ const updateVisitType = (visitType) => {
     })
 }
 
+const updateCheckIn = (checkIn) => {
+    fetch(`/api/appointments/update/${props.appointment.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({check_in: checkIn}),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        props.appointment.check_in = checkIn
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
+const updateCheckOut = (checkOut) => {
+    fetch(`/api/appointments/update/${props.appointment.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({check_out: checkOut}),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        props.appointment.check_out = checkOut
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
 const updatePayment = (paid) => {
     fetch(`/api/appointments/update/${props.appointment.id}`, {
         method: 'PATCH',
@@ -63,13 +89,24 @@ const cancelAppointment = function () {
         <option disabled>Select One</option>
         <option v-for="type in visitTypes" :key="type">{{ type }}</option>
     </select></td>
-    <td>{{ appointment.check_in }}</td>
-    <td>{{ appointment.check_out }}</td>
+    <td><input
+        v-model="appointment.check_in"
+        class="w-48"
+        type="datetime-local"
+        @change="()=>updateCheckIn(props.appointment.check_in)"
+        />
+    </td>
+    <td><input
+        v-model="appointment.check_out"
+        class="w-48"
+        type="datetime-local"
+        @change="()=>updateCheckOut(props.appointment.check_out)"
+    /></td>
         <!--  TODO: figure out the checkbox sheeayt  -->
     <td><input
         v-model="appointment.paid"
-        @checked="appointment.paid ? 'checked' : ''"
-        class="checkbox checkbox-xs"
+        class="checkbox checkbox-md"
+        checked="{{appointment.paid ? 'checked' : ''}}"
         @change="()=>updatePayment(props.appointment.paid)"/></td>
     <td>
         <button class="btn btn-active" @click="()=>cancelAppointment()">
