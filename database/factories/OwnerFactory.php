@@ -20,7 +20,7 @@ class OwnerFactory extends Factory
             'name' => $this->faker->name(),
             'address' => $this->faker->address(),
             'phone_number' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email()
+            'email' => $this->faker->word() . rand(10, 999) . '@example.com'
         ];
     }
 }
