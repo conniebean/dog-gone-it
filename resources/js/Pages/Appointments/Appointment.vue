@@ -19,7 +19,7 @@
     <td><input
         v-model="appointment.check_out"
         class="w-48"
-        type="time"
+        type="datetime-local"
         @change="()=>updateCheckOut(props.appointment.check_out)"
     /></td>
     <td>
@@ -118,4 +118,24 @@ const cancelAppointment = function () {
 }
 
 </script>
+
+<style>
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        filter: invert(100%);
+        -webkit-align-items: center;
+        display: -webkit-inline-flex;
+        font-family: monospace;
+        overflow: hidden;
+        -webkit-padding-start: -4px;
+    }
+
+    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+        -webkit-align-items: center;
+        display: -webkit-inline-flex;
+        font-family: monospace;
+        font-size: small;
+        overflow: hidden;
+        color: black;
+    }
+</style>
 

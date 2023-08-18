@@ -39,9 +39,9 @@
                             <option v-for="type in visitTypes">{{ type }}</option>
                         </select>
                     </div>
-                    <div class="flex">
-                        <label for="datePicker" class="ml-2 pl-3">Date</label>
-                        <datepicker v-model="appointment.appointment_date" week-starts-on="0" id="datePicker" :style="{ '--vdp-bg-color': '#AEAEAE', '--vdp-hover-bg-color': '#50CA96', 'margin-top': '10px', 'margin-bottom': '10px' }" ></datepicker>
+                    <div class="flex items-center my-2">
+                        <label for="datePicker" class="mr-2 pl-6">Date</label>
+                        <input type="date" v-model="appointment.appointment_date">
                     </div>
                     <button
                         class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
@@ -62,7 +62,6 @@ import BaseModal from "@/Modals/Appointments/BaseModal.vue";
 import {ref} from "vue";
 import {defineProps} from "vue";
 import {Inertia} from "@inertiajs/inertia";
-import Datepicker from 'vue3-datepicker/src/datepicker/Datepicker.vue';
 
 const props = defineProps({
     appointments: {
@@ -76,10 +75,6 @@ const props = defineProps({
         type: Object
     }
 });
-
-const components = {
-    Datepicker
-};
 
 const appointment = ref({
     dog_id: '',
@@ -126,3 +121,28 @@ const addAppointment = () => {
     })
 }
 </script>
+
+<style>
+input[type="date"] {
+    background: transparent;
+    color: black;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    -webkit-align-items: center;
+    display: -webkit-inline-flex;
+    font-family: monospace;
+    overflow: hidden;
+    -webkit-padding-start: 20px;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+    filter: invert(100%);
+    -webkit-align-items: center;
+    display: -webkit-inline-flex;
+    font-family: monospace;
+    overflow: hidden;
+    -webkit-padding-start: 1px;
+}
+</style>
