@@ -13,7 +13,7 @@
                     class="ml-2 mt-2"
                     v-model="appointment.visit_type"
                     id="visitType">
-                    <option v-for="type in visitTypes">{{ type }}</option>
+                    <option v-for="type in visit_types">{{ type }}</option>
                 </select>
             </div>
             <div class="flex items-center my-2">
@@ -35,8 +35,14 @@ import {defineProps, ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
-    visitTypes: {
+    visit_types: {
         type: Array
+    },
+    appointment_type: {
+        type: String,
+    },
+    dogs: {
+     type: Object
     }
 });
 
@@ -45,14 +51,64 @@ const appointment = ref({
     //todo: this obv needs to change
     facility_id: 1,
     appointmentable_id: 1,
-    appointmentable_type: 'daycare',
+    appointmentable_type: props.appointment_type,
     visit_type: '',
     appointment_date: '',
     paid: false
 });
 
+const getAppointmentableType = function (appointment) {
+    return appointment.appointmentable_type;
+}
+
+const addAppointment = () => {
+    const apptStuff = {
+        dog_id: appointment.value.dog_id,
+        appointment_date: appointment.value.appointment_date,
+        facility_id: appointment.value.facility_id,
+        appointmentable_id: appointment.value.appointmentable_id,
+        appointmentable_type: appointment.value.appointmentable_type,
+        visit_type: appointment.value.visit_type,
+        paid: appointment.value.paid
+    }
+    fetch(`/api/appointments/store`, {
+        method: 'POST',
+        body: JSON.stringify(apptStuff),
+        headers: {
+            'Content-type': 'application/json',
+        },
+    }).catch(function (e){
+        console.error(e)
+    })
+        .then(function () {
+            const appointmentableType = getAppointmentableType(appointment.value)
+            Inertia.visit(`/appointments/${appointmentableType}/index`)
+        })
+}
+
 </script>
 
-<style scoped>
+<style>
+input[type="date"] {
+    background: transparent;
+    color: black;
+}
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    -webkit-align-items: center;
+    display: -webkit-inline-flex;
+    font-family: monospace;
+    overflow: hidden;
+    -webkit-padding-start: 20px;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+    filter: invert(100%);
+    -webkit-align-items: center;
+    display: -webkit-inline-flex;
+    font-family: monospace;
+    overflow: hidden;
+    -webkit-padding-start: 1px;
+}
 </style>

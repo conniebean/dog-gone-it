@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Boarding;
+use App\Models\Dog;
 use App\Models\Grooming;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +15,8 @@ class GroomingController extends Controller
     {
         return Inertia::render('Appointments/Grooming', [
             'appointments' => Appointment::today()->appointmentType(Grooming::class)->with('dog')->get(),
-            'visitTypes' => Appointment::groomingVisitTypes()
+            'visitTypes' => Appointment::groomingVisitTypes(),
+            'dogs' => Dog::all()->keyBy('id')->get(),
         ]);
     }
 }
