@@ -139,7 +139,7 @@ const ownerLastName = function (){
     if(name[0] === 'Miss'
         || name[0] === 'Mr'
         || name[0] === 'Ms'
-        || name[0] === 'Dr'
+        || name[0] === 'Dr.'
     ){
         name.splice(1,1);
     }
