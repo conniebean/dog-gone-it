@@ -11,7 +11,9 @@ class OwnerController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        return new JsonResponse(Owner::query()->where('name', 'LIKE', "%{$request->input('query')}%")->get());
+        return new JsonResponse(Owner::query()
+            ->where('name', 'LIKE', "%{$request->input('query')}%")
+            ->with('dogs')->get());
     }
 
     public function create()

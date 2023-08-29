@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dog;
 use App\Models\Owner;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -60,7 +61,8 @@ class OwnerControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $owner1 = Owner::factory()->create(['name' => 'Wendal']);
-        $owner2 = Owner::factory()->create(['name' => 'Randall']);
+        Owner::factory()->create(['name' => 'Randall']);
+        $dog1 = Dog::factory()->for($owner1)->create(['name' => 'weeendall']);
         $owner3 = Owner::factory()->create(['name' => 'Wendalll']);
 
         $response = $this->actingAs($user)
@@ -69,10 +71,14 @@ class OwnerControllerTest extends TestCase
             ->assertJsonCount(2);
         $response->assertJson([
             [
-                'name' => $owner1->name
+                'name' => $owner1->name,
+                'dogs' => [
+                    ['name' => $dog1->name]
+                ]
             ],
             [
-                'name' => $owner3->name
+                'name' => $owner3->name,
+                'dogs' => []
             ],
         ]);
     }
