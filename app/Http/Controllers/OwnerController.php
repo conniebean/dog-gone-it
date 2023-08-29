@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Owner;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class OwnerController extends Controller
 {
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        return Inertia::render('Owners/Index');
+        return new JsonResponse(Owner::query()->where('name', 'LIKE', "%{$request->input('query')}%")->get());
     }
 
     public function create()

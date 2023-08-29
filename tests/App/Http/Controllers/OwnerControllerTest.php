@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Owner;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
-use Mockery;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class OwnerControllerTest extends TestCase
@@ -56,5 +53,27 @@ class OwnerControllerTest extends TestCase
         $this->actingAs($admin)->delete(route('owner.delete', $owner))->assertSuccessful();
 
         $this->assertDatabaseMissing('owners', $owner);
+    }
+
+    /** @test */
+    public function it_searches_by_owner_name()
+    {
+        $user = User::factory()->create();
+        $owner1 = Owner::factory()->create(['name' => 'Wendal']);
+        $owner2 = Owner::factory()->create(['name' => 'Randall']);
+        $owner3 = Owner::factory()->create(['name' => 'Wendalll']);
+
+        $response = $this->actingAs($user)
+            ->getJson(route('owner.index', ['query' => 'Wend']))
+            ->assertSuccessful()
+            ->assertJsonCount(2);
+        $response->assertJson([
+            [
+                'name' => $owner1->name
+            ],
+            [
+                'name' => $owner3->name
+            ],
+        ]);
     }
 }
