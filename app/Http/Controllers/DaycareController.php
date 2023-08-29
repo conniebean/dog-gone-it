@@ -13,8 +13,11 @@ class DaycareController extends Controller
     public function index()
     {
         return Inertia::render('Appointments/Daycare', [
-            'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog')->get(),
-            'visitTypes' => Appointment::daycareVisitTypes()
+            'appointments' => Appointment::today()->appointmentType(Daycare::class)->with('dog', function ($dog){
+                return $dog->with('owner');
+            })->get(),
+            'visitTypes' => Appointment::daycareVisitTypes(),
+            'dogs' => Dog::all()->keyBy('id'),
         ]);
     }
 

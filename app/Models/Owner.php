@@ -15,5 +15,4 @@ class Owner extends Model
     {
         return $this->hasMany(Dog::class, 'owner_id', 'id');
     }
-
 }

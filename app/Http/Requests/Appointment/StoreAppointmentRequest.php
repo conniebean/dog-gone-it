@@ -19,7 +19,7 @@ class StoreAppointmentRequest extends FormRequest
                 new DogHasUpToDateVaccines(),
             ],
             'facility_id' => ['required', 'integer',],
-            'appointmentable_id' => 'required|integer',
+            'appointmentable_id' => 'integer',
             'appointmentable_type' => 'required|string',
             'visit_type' => 'string',
             'check_in' => 'date',

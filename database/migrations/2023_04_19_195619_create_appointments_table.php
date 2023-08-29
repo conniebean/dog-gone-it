@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('facility_id')->constrained('facilities')->cascadeOnDelete();
             $table->string('appointmentable_id');
             $table->string('appointmentable_type');
-            $table->time('check_in')->nullable();
-            $table->time('check_out')->nullable();
+            $table->dateTime('check_in')->nullable();
+            $table->dateTime('check_out')->nullable();
             $table->dateTime('appointment_date');
             $table->boolean('paid');
             $table->timestamps();

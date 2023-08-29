@@ -21,7 +21,11 @@ class DogSeeder extends Seeder
         $vaccines = Vaccine::where('required', 1)->get();
 
         $dogs->each(function ($dog) use ($vaccines){
-            $dog->vaccines()->attach($vaccines);
+            foreach ($vaccines as $vaccine) {
+                $dog->vaccines()->attach($vaccine->id, [
+                    'expiry_date' => now()->addYears(2),
+                ]);
+            }
         });
     }
 }

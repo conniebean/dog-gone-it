@@ -1,6 +1,59 @@
+<template>
+    <td class="font-extrabold flex-grow">{{ appointment.dog.name }} {{ ownerLastName() }}</td>
+    <td><select
+        v-model="appointment.visit_type"
+        id="visitType"
+        class="select w-48 max-w-xs"
+        @change="()=>updateVisitType(props.appointment.visit_type)"
+    >
+        <option disabled>Select One</option>
+        <option v-for="type in visitTypes" :key="type">{{ type }}</option>
+    </select></td>
+    <td><input
+        v-model="appointment.check_in"
+        class="w-48"
+        type="datetime-local"
+        @change="()=>updateCheckIn(props.appointment.check_in)"
+        />
+    </td>
+    <td><input
+        v-model="appointment.check_out"
+        class="w-48"
+        type="datetime-local"
+        @change="()=>updateCheckOut(props.appointment.check_out)"
+    /></td>
+    <td>
+        <div class="cursor-pointer" @click="()=>updatePayment(!props.appointment.paid)">
+            <span v-if="appointment.paid">
+                <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+            </span>
+            <span v-else>
+                <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M384 80c8.8 0 16 7.2 16 16V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V96c0-8.8 7.2-16 16-16H384zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg>
+            </span>
+        </div>
+    </td>
+    <td>
+        <button @click="toggleModal" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
+            View Owner
+        </button>
+        <base-modal :modalActive="modalActive" @close-modal="toggleModal">
+            <p>{{appointment.dog.owner.name}}</p>
+            <p>{{appointment.dog.owner.phone_number}}</p>
+            <p>{{appointment.dog.owner.address}}</p>
+            <p>{{appointment.dog.owner.email}}</p>
+        </base-modal>
+    </td>
+    <td>
+        <button class="btn btn-active" @click="()=>cancelAppointment()">
+            Cancel
+        </button>
+    </td>
+</template>
+
 <script setup>
-import {defineProps} from "vue";
+import {defineProps, ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
+import BaseModal from "@/Modals/Appointments/BaseModal.vue";
 
 const props = defineProps({
     appointment: {
@@ -26,6 +79,32 @@ const updateVisitType = (visitType) => {
     })
 }
 
+const updateCheckIn = (checkIn) => {
+    fetch(`/api/appointments/update/${props.appointment.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({check_in: checkIn}),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        props.appointment.check_in = checkIn
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
+const updateCheckOut = (checkOut) => {
+    fetch(`/api/appointments/update/${props.appointment.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({check_out: checkOut}),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        props.appointment.check_out = checkOut
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
 const updatePayment = (paid) => {
     fetch(`/api/appointments/update/${props.appointment.id}`, {
         method: 'PATCH',
@@ -39,24 +118,53 @@ const updatePayment = (paid) => {
     })
 }
 
+const cancelAppointment = function () {
+    fetch(`/api/appointments/delete/${props.appointment.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    }).then(function () {
+        Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
+    })
+}
+
+const modalActive = ref(false);
+const toggleModal = function ()  {
+    return modalActive.value = !modalActive.value;
+}
+
+const ownerLastName = function (){
+    const name = props.appointment.dog.owner.name.split(' ');
+    if(name[0] === 'Miss'
+        || name[0] === 'Mr'
+        || name[0] === 'Ms'
+        || name[0] === 'Dr'
+    ){
+        name.splice(1,1);
+    }
+    return name[1]
+}
+
 </script>
 
-<template>
-    <td>{{ appointment.dog.name }}</td>
-    <select
-        v-model="appointment.visit_type"
-        class="select w-full max-w-xs"
-        @change="()=>updateVisitType(props.appointment.visit_type)"
-    >
-        <option disabled>Select One</option>
-        <option v-for="type in visitTypes" :key="type">{{ type }}</option>
-    </select>
-    <td>{{ appointment.check_in }}</td>
-    <td>{{ appointment.check_out }}</td>
-        <!--  TODO: figure out the checkbox sheeayt      -->
-    <td><input
-        v-model="appointment.paid"
-        @checked="appointment.paid ? 'checked' : ''"
-        class="checkbox checkbox-xs"
-        @change="()=>updatePayment(props.appointment.paid)"/></td>
-</template>
+<style>
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+        filter: invert(100%);
+        -webkit-align-items: center;
+        display: -webkit-inline-flex;
+        font-family: monospace;
+        overflow: hidden;
+        -webkit-padding-start: -4px;
+    }
+
+    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+        -webkit-align-items: center;
+        display: -webkit-inline-flex;
+        font-family: monospace;
+        font-size: small;
+        overflow: hidden;
+        color: black;
+    }
+</style>
+
