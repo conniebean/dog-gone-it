@@ -14,9 +14,11 @@ class GroomingController extends Controller
     public function index()
     {
         return Inertia::render('Appointments/Grooming', [
-            'appointments' => Appointment::today()->appointmentType(Grooming::class)->with('dog')->get(),
+            'appointments' => Appointment::today()->appointmentType(Grooming::class)->with('dog', function ($dog){
+                return $dog->with('owner');
+            })->get(),
             'visitTypes' => Appointment::groomingVisitTypes(),
-            'dogs' => Dog::all()->keyBy('id')->get(),
+            'dogs' => Dog::all()->keyBy('id'),
         ]);
     }
 }

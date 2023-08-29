@@ -1,5 +1,5 @@
 <template>
-    <td class="font-extrabold">{{ appointment.dog.name }}</td>
+    <td class="font-extrabold flex-grow">{{ appointment.dog.name }} {{ ownerLastName() }}</td>
     <td><select
         v-model="appointment.visit_type"
         id="visitType"
@@ -33,6 +33,17 @@
         </div>
     </td>
     <td>
+        <button @click="toggleModal" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
+            View Owner
+        </button>
+        <base-modal :modalActive="modalActive" @close-modal="toggleModal">
+            <p>{{appointment.dog.owner.name}}</p>
+            <p>{{appointment.dog.owner.phone_number}}</p>
+            <p>{{appointment.dog.owner.address}}</p>
+            <p>{{appointment.dog.owner.email}}</p>
+        </base-modal>
+    </td>
+    <td>
         <button class="btn btn-active" @click="()=>cancelAppointment()">
             Cancel
         </button>
@@ -40,8 +51,9 @@
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {defineProps, ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
+import BaseModal from "@/Modals/Appointments/BaseModal.vue";
 
 const props = defineProps({
     appointment: {
@@ -115,6 +127,23 @@ const cancelAppointment = function () {
     }).then(function () {
         Inertia.visit(`/appointments/${props.appointment.appointmentable_type}/index`)
     })
+}
+
+const modalActive = ref(false);
+const toggleModal = function ()  {
+    return modalActive.value = !modalActive.value;
+}
+
+const ownerLastName = function (){
+    const name = props.appointment.dog.owner.name.split(' ');
+    if(name[0] === 'Miss'
+        || name[0] === 'Mr'
+        || name[0] === 'Ms'
+        || name[0] === 'Dr'
+    ){
+        name.splice(1,1);
+    }
+    return name[1]
 }
 
 </script>
