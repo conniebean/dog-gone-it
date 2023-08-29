@@ -15,12 +15,4 @@ class Owner extends Model
     {
         return $this->hasMany(Dog::class, 'owner_id', 'id');
     }
-
-    public function last_name()
-    {
-        $lastName = explode(" ", $this->name);
-
-        return $lastName[1];
-    }
-
 }
