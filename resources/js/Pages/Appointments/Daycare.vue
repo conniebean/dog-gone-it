@@ -11,7 +11,7 @@
         </table>
     </div>
     <div>
-        <button @click="toggleModal" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
+        <button @click="toggleModal" class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
             Add Appointment
         </button>
         <BaseModal :modalActive="modalActive" @close-modal="toggleModal">

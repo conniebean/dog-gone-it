@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dog;
 use App\Models\Owner;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -56,5 +57,23 @@ class OwnerControllerTest extends TestCase
         $this->actingAs($admin)->delete(route('owner.delete', $owner))->assertSuccessful();
 
         $this->assertDatabaseMissing('owners', $owner);
+    }
+
+    /** @test */
+    public function it_can_return_list_of_dogs_belonging_to_an_owner()
+    {
+        $admin = User::factory()->create(['role_id' => 2]);
+        $owner = Owner::factory()->create(['name' => 'John French']);
+        $owner1 = Owner::factory()->create(['name' => 'John PaulIII']);
+        $owner2 = Owner::factory()->create(['name' => 'Paul English']);
+        $owner3 = Owner::factory()->create(['name' => 'Ringo Spanish']);
+        $dog = Dog::factory()->for($owner)->create(['name' => 'Fluffy']);
+        $dog1 = Dog::factory()->for($owner1)->create(['name' => 'Stubby']);
+        $dog2 = Dog::factory()->for($owner2)->create(['name' => 'Charles']);
+        $route=$this->actingAs($admin)->get(route('owner.search',['name'=>'John']))->assertSuccessful();
+        //Checks for things
+        $route->assertJsonFragment([$dog->name]);
+        $route->assertJsonFragment([$dog1->name]);
+        $route->assertJsonMissing([$dog2->name]);
     }
 }

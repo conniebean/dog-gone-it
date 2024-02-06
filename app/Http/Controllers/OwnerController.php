@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dog;
 use App\Models\Owner;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,9 +27,29 @@ class OwnerController extends Controller
         return Owner::create($request->input('owner'));
     }
 
+    public function search(Request $namein)
+    {
+        $name = $namein->name; // Access the 'name' parameter from the request
+        $dogs = [];
+
+        if ($name) {
+            $owners = Owner::where('name', 'like', '%' . $name . '%')->with('dogs')->get();
+            $dogs = $owners->flatMap->dogs; // Collect all dogs from all matching owners
+        } else {
+            $dogs = Dog::all();
+        }
+
+        return $dogs;
+
+    }
+
     public function show(Owner $owner)
     {
-        //
+        return Owner::find($owner->id)->with('dog_id')->get();
+
+        // Check for search input
+
+        return view('welcome')->with('users', $users);
     }
 
     public function edit(Owner $owner)

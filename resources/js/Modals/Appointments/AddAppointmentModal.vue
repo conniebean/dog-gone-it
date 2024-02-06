@@ -1,5 +1,12 @@
-<template>
+<template >
     <div>
+<!--form input for searching the database by owner to get list of registered dogs        -->
+        <form>
+            <div>
+                <input type="search" class="form-control " placeholder="Find dog by owner" name="search">
+            </div>
+        </form>
+
         <form method="post" @submit.prevent="addAppointment">
             <div>
                 <label for="dogName">Select A Dog</label>
@@ -10,9 +17,10 @@
             <div>
                 <label for="visitType" id="visitType">Visit Type</label>
                 <select
-                    class="ml-2 mt-2"
+                    class="select select-bordered ml-2 mt-2"
                     v-model="appointment.visit_type"
                     id="visitType">
+                    <option disabled selected>Pick one</option>
                     <option v-for="type in visit_types">{{ type }}</option>
                 </select>
             </div>

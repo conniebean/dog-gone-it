@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('owner')->group(function () {
     Route::get('index', OwnerController::class . '@index')->name('owner.index');
+    Route::get('search', OwnerController::class . '@search')->name('owner.search');
     Route::post('store', OwnerController::class . '@store')->name('owner.store');
     Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware(['admin', 'auth']);
     Route::delete('{id}/dogs/{dogId}', DogController::class . '@delete')->name('dog.delete');

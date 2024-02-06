@@ -9,6 +9,20 @@ module.exports = {
         './resources/js/**/*.vue',
     ],
 
+    daisyui: {
+        themes: [
+            {
+                mytheme: {
+                    "primary": "#c4af9a",
+                    "secondary": "#c5c9a4",
+                    "accent": "#37cdbe",
+                    "neutral": "#3d4451",
+                    "base-100": "#476a6f",
+                },
+            },
+        ],
+    },
+
     theme: {
         extend: {
             fontFamily: {
