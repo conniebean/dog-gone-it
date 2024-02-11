@@ -27,13 +27,13 @@ class OwnerController extends Controller
         return Owner::create($request->input('owner'));
     }
 
-    public function search(Request $namein)
+    public function search(Request $request)
     {
-        $name = $namein->name; // Access the 'name' parameter from the request
+        // Access the 'name' parameter from the request
         $dogs = [];
 
-        if ($name) {
-            $owners = Owner::where('name', 'like', '%' . $name . '%')->with('dogs')->get();
+        if ($request->name) {
+            $owners = Owner::where('name', 'like', '%' . $request->name . '%')->with('dogs')->get();
             $dogs = $owners->flatMap->dogs; // Collect all dogs from all matching owners
         } else {
             $dogs = Dog::all();

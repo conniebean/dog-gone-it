@@ -1,9 +1,9 @@
 <template >
     <div>
 <!--form input for searching the database by owner to get list of registered dogs        -->
-        <form>
+        <form method="get">
             <div>
-                <input type="search" class="form-control " placeholder="Find dog by owner" name="search">
+                <input type="search" class="form-control" placeholder="Find dog by owner" v-model="searchTerm" @input="debouncedSearch">
             </div>
         </form>
 
@@ -39,8 +39,40 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+
+
+import {defineProps, ref, watch} from "vue";
 import {Inertia} from "@inertiajs/inertia";
+
+const searchTerm = ref('');
+const dogs = ref([]);
+
+let debounceTimer;
+const debounce = (func, delay = 500) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(func, delay);
+};
+
+const fetchOwners = async () => {
+    try {
+        const response = await fetch(`/api/owners/search`, {
+            method: 'POST', // Change to POST if you're sending data in the body
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: searchTerm.value }), // Send search term in request body
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        dogs.value = data; // Update the search results
+    } catch (error) {
+        console.error('Error fetching owners:', error);
+    }
+};
+
+const debouncedSearch = () => debounce(fetchOwners, 500);
 
 const props = defineProps({
     visit_types: {
@@ -48,9 +80,6 @@ const props = defineProps({
     },
     appointment_type: {
         type: String,
-    },
-    dogs: {
-     type: Object
     }
 });
 

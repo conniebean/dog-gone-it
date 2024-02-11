@@ -29,4 +29,12 @@ class Facility extends Model
                 ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
                 ->where('appointments.appointment_date', $date)->count() === $capacity;
     }
+
+    public function scopeGetAppointmentCount($query, $daycare_capacity, $date, $appointment_type)
+    {
+        return $daycare_capacity - $query
+            ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
+            ->where('appointments.appointment_date', $date)
+            ->where('appointmentable_type', $appointment_type)->count();
+    }
 }
