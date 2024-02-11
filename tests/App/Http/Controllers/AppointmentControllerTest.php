@@ -84,6 +84,22 @@ class AppointmentControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_show_the_number_of_available_spots_for_the_given_appointment()
+    {
+        Appointment::factory(15)->for($this->facility)
+            ->sequence(
+            ['appointment_date' => Carbon::today(), 'appointmentable_type' => 'daycare'],
+            ['appointment_date' => Carbon::today(), 'appointmentable_type' => 'grooming'],
+            ['appointment_date' => Carbon::today(), 'appointmentable_type' => 'boarding'],
+        )->create();
+
+        $expected = 15;
+        $actualDaycareSpotsAvailable = Facility::getAppointmentCount($this->facility->daycare_capacity, Carbon::today(), 'daycare');
+
+        $this->assertEquals($expected, $actualDaycareSpotsAvailable);
+    }
+
+    /** @test */
     public function it_cannot_add_a_dog_to_the_daycare_on_a_date_in_the_past()
     {
         $this->postToDaycare($this->dog, $this->date->subMonth()->toDateString())

@@ -1,14 +1,25 @@
 <template>
     <NavLink/>
-    <div class="overflow-x-auto px-48">
-        <table class="table table-md table-zebra table-pin-rows table-pin-cols justify-items-center">
-            <AppointmentTableHeader/>
-            <tbody>
-            <tr v-for="appointment in appointments" :key="appointment.id">
-                <Appointment :appointment="appointment" :visit-types="visitTypes"/>
-            </tr>
-            </tbody>
-        </table>
+
+    <div class="overflow-x-auto px-12">
+        <div class="flex">
+            <div class="pr-16 py-20">
+                <div class="flex flex-col justify-center bg-secondary text-base-100 font-bold p-4">
+                    <p>{{availableSpots}} Available spots</p>
+                </div>
+            </div>
+            <div class="flex-grow">
+                <table class="table table-md table-zebra table-pin-rows table-pin-cols justify-items-center">
+                    <AppointmentTableHeader/>
+                    <tbody>
+                    <tr v-for="appointment in appointments" :key="appointment.id">
+                        <Appointment :appointment="appointment" :visit-types="visitTypes"/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </div>
     <div>
         <button @click="toggleModal" class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
@@ -38,6 +49,9 @@ const props = defineProps({
     },
     dogs: {
         type: Object
+    },
+    availableSpots: {
+        type: Number
     }
 });
 
