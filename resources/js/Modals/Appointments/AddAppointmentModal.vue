@@ -55,18 +55,18 @@ const debounce = (func, delay = 500) => {
 
 const fetchOwners = async () => {
     try {
-        const response = await fetch(`/api/owners/search`, {
-            method: 'POST', // Change to POST if you're sending data in the body
+        const response = await fetch(`/api/owner/search`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: searchTerm.value }), // Send search term in request body
+            body: JSON.stringify({ name: searchTerm.value }),
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        dogs.value = data; // Update the search results
+        dogs.value = data;
     } catch (error) {
         console.error('Error fetching owners:', error);
     }

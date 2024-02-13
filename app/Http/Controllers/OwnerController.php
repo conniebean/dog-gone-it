@@ -29,18 +29,18 @@ class OwnerController extends Controller
 
     public function search(Request $request)
     {
-        // Access the 'name' parameter from the request
         $dogs = [];
-
         if ($request->name) {
             $owners = Owner::where('name', 'like', '%' . $request->name . '%')->with('dogs')->get();
-            $dogs = $owners->flatMap->dogs; // Collect all dogs from all matching owners
+            $dogs = $owners->flatMap->dogs;
+            $dogs->each(function ($d) {
+               return $d->name;
+            });
         } else {
             $dogs = Dog::all();
         }
 
         return $dogs;
-
     }
 
     public function show(Owner $owner)

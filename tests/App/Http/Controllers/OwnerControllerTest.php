@@ -70,7 +70,7 @@ class OwnerControllerTest extends TestCase
         $dog = Dog::factory()->for($owner)->create(['name' => 'Fluffy']);
         $dog1 = Dog::factory()->for($owner1)->create(['name' => 'Stubby']);
         $dog2 = Dog::factory()->for($owner2)->create(['name' => 'Charles']);
-        $route=$this->actingAs($admin)->get(route('owner.search',['name'=>'John']))->assertSuccessful();
+        $route=$this->actingAs($admin)->post(route('owner.search',['name'=>'John']))->assertSuccessful();
         //Checks for things
         $route->assertJsonFragment([$dog->name]);
         $route->assertJsonFragment([$dog1->name]);
