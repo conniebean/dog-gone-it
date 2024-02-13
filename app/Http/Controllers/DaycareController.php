@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Daycare;
 use App\Models\Dog;
+use App\Models\Facility;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,6 +20,7 @@ class DaycareController extends Controller
             })->get(),
             'visitTypes' => Appointment::daycareVisitTypes(),
             'dogs' => Dog::all()->keyBy('id'),
+            'availableSpots' => Facility::getAppointmentCount(20, Carbon::today(), 'daycare'),
         ]);
     }
 

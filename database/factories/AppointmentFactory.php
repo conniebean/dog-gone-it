@@ -29,7 +29,7 @@ class AppointmentFactory extends Factory
         $randomAppointment = $this->faker->randomElement($appointmentable_types);
         return [
             'dog_id' => Dog::factory(),
-            'facility_id' => Facility::factory(),
+            'facility_id' => 1,
             'visit_type' => $this->faker->randomElement($randomAppointment['class']::VISIT_TYPE),
             'appointmentable_id' => $randomAppointment['class']::factory(),
             'appointmentable_type' => $randomAppointment['morph'],
