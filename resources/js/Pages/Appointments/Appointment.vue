@@ -37,6 +37,7 @@
             View Owner
         </button>
         <base-modal :modalActive="modalActive" @close-modal="toggleModal">
+            <h3 class="font-bold">Owner Info</h3>
             <p>{{appointment.dog.owner.name}}</p>
             <p>{{appointment.dog.owner.phone_number}}</p>
             <p>{{appointment.dog.owner.address}}</p>
