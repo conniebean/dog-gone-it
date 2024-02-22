@@ -16,7 +16,7 @@ class DogSeeder extends Seeder
      */
     public function run()
     {
-        $dogs = Dog::factory(7)->create();
+        $dogs = Dog::factory(25)->create();
 
         $vaccines = Vaccine::where('required', 1)->get();
 
