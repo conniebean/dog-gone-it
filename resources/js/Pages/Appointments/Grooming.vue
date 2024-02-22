@@ -1,6 +1,11 @@
 <template>
     <NavLink/>
-    <div class="overflow-x-auto px-48">
+    <div class="overflow-x-auto px-12">
+        <div class="mx-auto">
+            <div class=" w-1/3 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
+                <p>{{ availableSpots }} Available spots</p>
+            </div>
+        </div>
         <table class="table table-md table-zebra table-pin-rows table-pin-cols justify-items-center">
             <AppointmentTableHeader/>
             <tbody>
@@ -10,8 +15,9 @@
             </tbody>
         </table>
     </div>
-    <div>
-        <button @click="toggleModal" class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
+    <div class="flex justify-end pr-12 py-2">
+        <button @click="toggleModal"
+                class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
             Add Appointment
         </button>
         <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
@@ -38,12 +44,15 @@ const props = defineProps({
     },
     dogs: {
         type: Object
+    },
+    availableSpots: {
+        type: Number
     }
 });
 
 
 const modalActive = ref(false);
-const toggleModal = function ()  {
+const toggleModal = function () {
     return modalActive.value = !modalActive.value;
 }
 </script>

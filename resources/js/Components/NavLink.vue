@@ -12,7 +12,24 @@
                     <li><Link href="/appointments/boarding/index">Boarding</Link></li>
                 </ul>
             </div>
-            <a class="btn btn-ghost normal-case text-xl">Dog Gone It</a>
+            <div class="drawer fixed z-10">
+                <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+                <div class="drawer-content">
+                    <!-- Page content here -->
+                    <label for="my-drawer" class="btn btn-ghost normal-case text-xl drawer-button">Dog Gone It</label>
+                </div>
+                <div class="drawer-side">
+                    <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+                    <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+                        <!-- Sidebar content here -->
+                        <li class="text-lg"><a>Dog Gone It</a></li>
+                        <li><a>Owners</a></li>
+                        <li><a>Dogs</a></li>
+                        <li><a>Reports</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
@@ -47,8 +64,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { Link } from '@inertiajs/inertia-vue3';
+import {computed} from 'vue';
+import {Link} from '@inertiajs/inertia-vue3';
 
 const props = defineProps(['href', 'active']);
 

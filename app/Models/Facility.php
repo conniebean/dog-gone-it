@@ -18,6 +18,7 @@ class Facility extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
     public function currentAppointments(): Builder
     {
         return Appointment::query()->where('facility_id', $this->id);
@@ -33,8 +34,8 @@ class Facility extends Model
     public function scopeGetAppointmentCount($query, $daycare_capacity, $date, $appointment_type)
     {
         return $daycare_capacity - $query
-            ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
-            ->where('appointments.appointment_date', $date)
-            ->where('appointmentable_type', $appointment_type)->count();
+                ->join('appointments', 'appointments.facility_id', '=', 'facilities.id')
+                ->where('appointments.appointment_date', $date)
+                ->where('appointmentable_type', $appointment_type)->count();
     }
 }

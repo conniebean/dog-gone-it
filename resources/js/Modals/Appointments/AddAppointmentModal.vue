@@ -1,40 +1,80 @@
-<template >
+<template>
     <div>
-<!--form input for searching the database by owner to get list of registered dogs        -->
+        <div class="flex justify-center pb-6 font-bold text-black">
+            <h3>Add An Appointment</h3>
+        </div>
+        <!--form input for searching the database by owner to get list of registered dogs        -->
         <form method="get">
             <div>
-                <input type="search" class="form-control" placeholder="Find dog by owner" v-model="searchTerm" @input="debouncedSearch">
+                <input type="search"
+                       class="form-control rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
+                       placeholder="Find dog by owner" v-model="searchTerm" @input="debouncedSearch">
             </div>
         </form>
 
-        <form method="post" @submit.prevent="addAppointment">
-            <div>
-                <label for="dogName">Select A Dog</label>
-                <select class="ml-2" v-model="appointment.dog_id">
-                    <option v-for="dog in dogs"  :key="dog.id" :value="dog.id">{{ dog.name }}</option>
-                </select>
-            </div>
-            <div>
-                <label for="visitType" id="visitType">Visit Type</label>
+
+        <form method="post" @submit.prevent="addAppointment" class="flex flex-col justify-between h-full">
+            <div class="mb-4">
                 <select
-                    class="select select-bordered ml-2 mt-2"
-                    v-model="appointment.visit_type"
-                    id="visitType">
-                    <option disabled selected>Pick one</option>
-                    <option v-for="type in visit_types">{{ type }}</option>
+                    class="mt-8 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
+                    v-model="appointment.dog_id">
+                    <option class="text-black-50" value="" disabled selected>Select A Dog</option>
+                    <option class="text-black" v-for="dog in dogs" :key="dog.id" :value="dog.id">{{ dog.name }}</option>
                 </select>
             </div>
-            <div class="flex items-center my-2">
-                <label for="datePicker" class="mr-2 pl-6">Date</label>
-                <input type="date" v-model="appointment.appointment_date">
+            <div class="mb-4">
+                <select
+                    class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
+                    v-model="appointment.type">
+                    <option class="text-black-50" value="" disabled selected>Visit Type</option>
+                    <option class="text-black" v-for="type in visit_types" :key="type.id" :value="type">{{
+                            type
+                        }}
+                    </option>
+                </select>
             </div>
-            <button
-                class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"
-                type="submit"
-            >
-                Submit
-            </button>
+            <div class="mb-4">
+                <input type="date"
+                       class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                       v-model="appointment.appointment_date">
+            </div>
+            <div class="mt-4">
+                <button class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded w-full shadow-lg">
+                    Submit
+                </button>
+            </div>
         </form>
+
+        <!--   This is the Original Code  -->
+        <!--        <form method="post" @submit.prevent="addAppointment">-->
+        <!--            <div>-->
+        <!--                <label for="dogName">Select A Dog</label>-->
+        <!--                <select class="ml-2" v-model="appointment.dog_id">-->
+        <!--                    <option v-for="dog in dogs"  :key="dog.id" :value="dog.id">{{ dog.name }}</option>-->
+        <!--                </select>-->
+        <!--            </div>-->
+        <!--            <div>-->
+        <!--                <label for="visitType" id="visitType">Visit Type</label>-->
+        <!--                <select-->
+        <!--                    class="select select-bordered ml-2 mt-2"-->
+        <!--                    v-model="appointment.visit_type"-->
+        <!--                    id="visitType">-->
+        <!--                    <option disabled selected>Pick one</option>-->
+        <!--                    <option v-for="type in visit_types">{{ type }}</option>-->
+        <!--                </select>-->
+        <!--            </div>-->
+        <!--            <div class="flex items-center my-2">-->
+        <!--                <label for="datePicker" class="mr-2 pl-6">Date</label>-->
+        <!--                <input type="date" v-model="appointment.appointment_date">-->
+        <!--            </div>-->
+        <!--            <button-->
+        <!--                class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded"-->
+        <!--                type="submit"-->
+        <!--            >-->
+        <!--                Submit-->
+        <!--            </button>-->
+        <!--        </form>-->
+
     </div>
 </template>
 
@@ -60,7 +100,7 @@ const fetchOwners = async () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: searchTerm.value }),
+            body: JSON.stringify({name: searchTerm.value}),
         });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -90,6 +130,7 @@ const appointment = ref({
     appointmentable_id: 1,
     appointmentable_type: props.appointment_type,
     visit_type: '',
+    type: '',
     appointment_date: '',
     paid: false
 });
@@ -114,7 +155,7 @@ const addAppointment = () => {
         headers: {
             'Content-type': 'application/json',
         },
-    }).catch(function (e){
+    }).catch(function (e) {
         console.error(e)
     })
         .then(function () {
@@ -127,8 +168,10 @@ const addAppointment = () => {
 
 <style>
 input[type="date"] {
-    background: transparent;
+    background: white;
     color: black;
+    color-scheme: dark;
+
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -138,6 +181,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-family: monospace;
     overflow: hidden;
     -webkit-padding-start: 20px;
+    cursor: pointer;
 }
 
 input[type="date"]::-webkit-date-and-time-value {
