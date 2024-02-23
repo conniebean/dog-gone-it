@@ -25,11 +25,9 @@
             <div class="mb-4">
                 <select
                     class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
-                    v-model="appointment.type">
+                    v-model="appointment.visit_type">
                     <option class="text-black-50" value="" disabled selected>Visit Type</option>
-                    <option class="text-black" v-for="type in visit_types" :key="type.id" :value="type">{{
-                            type
-                        }}
+                    <option class="text-black" v-for="type in visit_types" >{{ type }}
                     </option>
                 </select>
             </div>
