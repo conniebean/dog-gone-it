@@ -12,7 +12,7 @@
                     <li><Link href="/appointments/boarding/index">Boarding</Link></li>
                 </ul>
             </div>
-            <div class="drawer fixed z-10">
+            <div class="drawer z-10">
                 <input id="my-drawer" type="checkbox" class="drawer-toggle" />
                 <div class="drawer-content">
                     <!-- Page content here -->
