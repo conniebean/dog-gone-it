@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Appointment;
 
 use App\Rules\DaycareHasCapacity;
-use App\Rules\DogAlreadyInDaycare;
+use App\Rules\DogAlreadyInAppointment;
 use App\Rules\DogHasUpToDateVaccines;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,8 +15,11 @@ class StoreAppointmentRequest extends FormRequest
             'dog_id' => [
                 'required',
                 'integer',
-                new DogAlreadyInDaycare($this->validationData()['appointment_date']),
-                new DogHasUpToDateVaccines(),
+                new DogAlreadyInAppointment(
+                    $this->validationData()['appointment_date'],
+                    $this->validationData()['appointmentable_type']
+                ),
+                new DogHasUpToDateVaccines($this->validationData()['appointmentable_type']),
             ],
             'facility_id' => ['required', 'integer',],
             'appointmentable_id' => 'integer',

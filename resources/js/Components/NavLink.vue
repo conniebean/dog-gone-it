@@ -57,8 +57,8 @@
             </ul>
         </div>
         <div class="navbar-end">
-            <a class="btn btn-sm">Log Out</a>
-            <a class="btn btn-sm">Switch User</a>
+            <a class="btn btn-sm mr-4">Log Out</a>
+            <a class="btn btn-sm mr-4">Switch User</a>
         </div>
     </div>
 </template>

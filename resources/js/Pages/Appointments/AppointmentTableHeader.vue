@@ -1,6 +1,6 @@
 <template>
     <thead>
-    <tr>
+    <tr class="bg-base-200/10 text-white font-bold text-lg">
         <td>Dog</td>
         <td>Visit Type</td>
         <td>Check In</td>

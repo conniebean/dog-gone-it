@@ -45,7 +45,7 @@
         </base-modal>
     </td>
     <td>
-        <button class="btn btn-active" @click="()=>cancelAppointment()">
+        <button class="btn bg-red-400 text-black" @click="()=>cancelAppointment()">
             Cancel
         </button>
     </td>
@@ -138,9 +138,11 @@ const toggleModal = function ()  {
 const ownerLastName = function (){
     const name = props.appointment.dog.owner.name.split(' ');
     if(name[0] === 'Miss'
-        || name[0] === 'Mr'
-        || name[0] === 'Ms'
+        || name[0] === 'Mr.'
+        || name[0] === 'Mrs.'
+        || name[0] === 'Ms.'
         || name[0] === 'Dr.'
+        || name[0] === 'Prof.'
     ){
         name.splice(1,1);
     }
@@ -156,6 +158,8 @@ const ownerLastName = function (){
         display: -webkit-inline-flex;
         font-family: monospace;
         overflow: hidden;
+        color-scheme: dark;
+        cursor: pointer;
         -webkit-padding-start: -4px;
     }
 

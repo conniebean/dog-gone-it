@@ -12,7 +12,6 @@
             </div>
         </form>
 
-
         <form method="post" @submit.prevent="addAppointment" class="flex flex-col justify-between h-full">
             <div class="mb-4">
                 <select
@@ -22,6 +21,7 @@
                     <option class="text-black" v-for="dog in dogs" :key="dog.id" :value="dog.id">{{ dog.name }}</option>
                 </select>
             </div>
+            <div><p class="font-bold text-red-600 text-sm">{{ errors.message }}</p></div>
             <div class="mb-4">
                 <select
                     class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
@@ -78,7 +78,6 @@
 
 <script setup>
 
-
 import {defineProps, ref, watch} from "vue";
 import {Inertia} from "@inertiajs/inertia";
 
@@ -121,6 +120,10 @@ const props = defineProps({
     }
 });
 
+const errors = ref({
+    message: ''
+});
+
 const appointment = ref({
     dog_id: '',
     //todo: this obv needs to change
@@ -151,15 +154,42 @@ const addAppointment = () => {
         method: 'POST',
         body: JSON.stringify(apptStuff),
         headers: {
+            'Accept': 'application/json', // Ensure Laravel returns a JSON response
             'Content-type': 'application/json',
         },
-    }).catch(function (e) {
-        console.error(e)
     })
-        .then(function () {
-            const appointmentableType = getAppointmentableType(appointment.value)
-            Inertia.visit(`/appointments/${appointmentableType}/index`)
+        .then(response => {
+            // Check if the response was ok (status in the range 200-299)
+            if (!response.ok) {
+                // If the server response was not ok, handle 422 or other errors
+                if (response.status === 422) {
+                    // Parse JSON to get the actual validation errors
+                    return response.json().then(data => {
+                        let messages = Object.values(data.errors).map((msgs) => msgs.join(', ')).join('. ');
+                        errors.value.message = messages;
+                        console.log(errors.value.message); // Log or handle errors
+
+                        throw new Error('Validation failed'); // Prevent further processing
+                    });
+                } else {
+                    // Handle other errors
+                    throw new Error('Some error occurred');
+                }
+            }
+            // If response was ok, parse it as JSON and proceed
+            return response.json();
         })
+        .then(data => {
+            if (!data.errors){
+                const appointmentableType = getAppointmentableType(appointment.value);
+                Inertia.visit(`/appointments/${appointmentableType}/index`);
+            }
+            // Handle success case, data is the JSON object from the response
+        })
+        .catch(error => {
+            // Catch block for network errors or errors thrown from then blocks
+            console.error('Fetch error:', error.message);
+        });
 }
 
 </script>

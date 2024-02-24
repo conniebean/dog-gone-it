@@ -5,10 +5,10 @@
 
         <div class="flex">
             <div class="flex-grow">
-                <div class=" w-1/3 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
+                <div class="w-1/5 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
                     <p>{{ availableSpots }} Available spots</p>
                 </div>
-                <table class="table table-md table-zebra table-pin-rows table-pin-cols justify-items-center">
+                <table class="table table-lg bg-base-200 table-zebra-zebra table-pin-rows table-pin-cols justify-items-center">
                     <AppointmentTableHeader/>
                     <tbody>
                     <tr v-for="appointment in appointments" :key="appointment.id">
