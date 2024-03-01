@@ -1,14 +1,17 @@
 <template>
     <NavLink/>
 
+
     <div class="overflow-x-auto px-12">
 
         <div class="flex">
             <div class="flex-grow">
-                <div class="w-1/5 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
+                <div
+                    class="w-1/5 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
                     <p>{{ availableSpots }} Available spots</p>
                 </div>
-                <table class="table table-lg bg-base-200 table-zebra-zebra table-pin-rows table-pin-cols justify-items-center">
+                <table
+                    class="table table-lg bg-base-200 table-zebra-zebra table-pin-rows table-pin-cols justify-items-center">
                     <AppointmentTableHeader/>
                     <tbody>
                     <tr v-for="appointment in appointments" :key="appointment.id">
@@ -38,6 +41,7 @@ import {defineProps, ref} from "vue";
 import AddAppointmentModal from "@/Modals/Appointments/AddAppointmentModal.vue";
 import AppointmentTableHeader from "@/Pages/Appointments/AppointmentTableHeader.vue";
 import Appointment from "@/Pages/Appointments/Appointment.vue";
+import SideBar from "@/Components/SideBar.vue";
 
 const props = defineProps({
     appointments: {

@@ -1,22 +1,14 @@
 <template>
     <div class="navbar bg-base-100">
         <div class="navbar-start">
-            <div class="dropdown">
-                <label tabindex="0" class="btn btn-ghost lg:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                </label>
-                <ul tabindex="0" class="menu menu-md dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-30">
-                    <li></li>
-                    <li><Link href="/appointments/daycare/index">Daycare</Link></li>
-                    <li><Link href="/appointments/grooming/index">Grooming</Link></li>
-                    <li><Link href="/appointments/boarding/index">Boarding</Link></li>
-                </ul>
-            </div>
             <div class="drawer z-10">
-                <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-                <div class="drawer-content">
-                    <!-- Page content here -->
-                    <label for="my-drawer" class="btn btn-ghost normal-case text-xl drawer-button">Dog Gone It</label>
+                <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
+                <div class="drawer-content flex">
+
+                    <label for="my-drawer" class="btn drawer-button h-full">
+                        <SideBar/>
+                    </label>
+                    <h2 class="mt-2 ml-2 font-bold text-lg">Dog Gone It</h2>
                 </div>
                 <div class="drawer-side">
                     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -26,6 +18,20 @@
                         <li><a>Owners</a></li>
                         <li><a>Dogs</a></li>
                         <li><a>Reports</a></li>
+                        <li><h2 class="menu-title">Appointment Types</h2>
+                        <ul>
+                            <li>
+                            <Link href="/appointments/daycare/index">Daycare</Link>
+                        </li>
+                            <li>
+                                <Link href="/appointments/grooming/index">Grooming</Link>
+                            </li>
+                            <li>
+                                <Link href="/appointments/boarding/index">Boarding</Link>
+                            </li>
+                        </ul>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -66,6 +72,7 @@
 <script setup>
 import {computed} from 'vue';
 import {Link} from '@inertiajs/inertia-vue3';
+import SideBar from "@/Components/SideBar.vue";
 
 const props = defineProps(['href', 'active']);
 

@@ -3,7 +3,7 @@
     <td><select
         v-model="appointment.visit_type"
         id="visitType"
-        class="select w-48 max-w-xs"
+        class="select w-48 max-w-xs bg-white text-black"
         @change="()=>updateVisitType(props.appointment.visit_type)"
     >
         <option disabled>Select One</option>
