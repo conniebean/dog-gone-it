@@ -11,7 +11,12 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Owners/Index');
+        $owners = Owner::query()->paginate(10);
+        return Inertia::render('Owners/Index', [
+            'owners' => $owners->items(),
+            'lastPage' => $owners->lastPage(),
+            'total' => $owners->total(),
+        ]);
     }
 
     public function create()
@@ -43,13 +48,14 @@ class OwnerController extends Controller
         return $dogs;
     }
 
-    public function show(Owner $owner)
+    public function show(Request $request)
     {
-        return Owner::find($owner->id)->with('dog_id')->get();
+        $owner = Owner::where('id', $request->id)->firstOrFail();
 
-        // Check for search input
-
-        return view('welcome')->with('users', $users);
+        return Inertia::render('Owners/Profile', [
+            'owner' => $owner,
+            'dogs' => Dog::where('owner_id', $owner->id)->get(),
+        ]);
     }
 
     public function edit(Owner $owner)
