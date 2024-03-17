@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Owner\StoreOwnerRequest;
+use App\Http\Resources\OwnerResource;
 use App\Models\Dog;
 use App\Models\Owner;
 use Illuminate\Http\Request;
@@ -24,12 +26,12 @@ class OwnerController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(StoreOwnerRequest $request)
     {
-        $request->validate([
-            'owner' => 'required'
-        ]);
-        return Owner::create($request->input('owner'));
+        $validated = $request->validated();
+
+        $owner = Owner::create($validated);
+        return response()->json(OwnerResource::make($owner));
     }
 
     public function search(Request $request)

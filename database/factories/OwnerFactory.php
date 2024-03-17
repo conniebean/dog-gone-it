@@ -17,7 +17,7 @@ class OwnerFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => "{$this->faker->firstName()} {$this->faker->lastName()}",
             'address' => $this->faker->address(),
             'phone_number' => $this->faker->phoneNumber(),
             'email' => $this->faker->word() . rand(10, 999) . '@example.com'

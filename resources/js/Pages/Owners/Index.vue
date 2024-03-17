@@ -44,6 +44,15 @@
         <div>
             <h3>Total Owners: {{total}}</h3>
         </div>
+        <div class="flex justify-end pr-12 py-2">
+            <button @click="toggleModal"
+                    class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
+                Add Owner
+            </button>
+            <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
+                <add-owner-modal/>
+            </BaseModal>
+        </div>
     </div>
 </template>
 
@@ -52,6 +61,8 @@
 import {defineProps, ref} from "vue";
 import NavLink from "@/Components/NavLink.vue";
 import {Inertia} from "@inertiajs/inertia";
+import BaseModal from "@/Modals/Appointments/BaseModal.vue";
+import AddOwnerModal from "@/Modals/Owners/AddOwnerModal.vue";
 
 const props = defineProps({
     owners: {
@@ -95,6 +106,14 @@ const refreshPage = async () => {
         console.error('Error fetching owners:', error);
     }
 }
+
+const modalActive = ref(false);
+const toggleModal = function () {
+    return modalActive.value = !modalActive.value;
+}
+
+
+
 </script>
 
 <style scoped>
