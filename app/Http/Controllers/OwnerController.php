@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Owner\StoreOwnerRequest;
+use App\Http\Resources\OwnerResource;
 use App\Models\Dog;
 use App\Models\Owner;
 use Illuminate\Http\Request;
@@ -11,7 +13,12 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Owners/Index');
+        $owners = Owner::query()->orderBy('name')->paginate(7);
+        return Inertia::render('Owners/Index', [
+            'owners' => $owners->items(),
+            'lastPage' => $owners->lastPage(),
+            'total' => $owners->total(),
+        ]);
     }
 
     public function create()
@@ -19,12 +26,12 @@ class OwnerController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(StoreOwnerRequest $request)
     {
-        $request->validate([
-            'owner' => 'required'
-        ]);
-        return Owner::create($request->input('owner'));
+        $validated = $request->validated();
+
+        $owner = Owner::create($validated);
+        return response()->json(OwnerResource::make($owner));
     }
 
     public function search(Request $request)
@@ -43,13 +50,14 @@ class OwnerController extends Controller
         return $dogs;
     }
 
-    public function show(Owner $owner)
+    public function show(Request $request)
     {
-        return Owner::find($owner->id)->with('dog_id')->get();
+        $owner = Owner::where('id', $request->id)->firstOrFail();
 
-        // Check for search input
-
-        return view('welcome')->with('users', $users);
+        return Inertia::render('Owners/Profile', [
+            'owner' => $owner,
+            'dogs' => Dog::where('owner_id', $owner->id)->get(),
+        ]);
     }
 
     public function edit(Owner $owner)
