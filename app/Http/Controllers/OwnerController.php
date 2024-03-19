@@ -6,6 +6,7 @@ use App\Http\Requests\Owner\StoreOwnerRequest;
 use App\Http\Resources\OwnerResource;
 use App\Models\Dog;
 use App\Models\Owner;
+use App\Models\Vaccine;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -53,10 +54,16 @@ class OwnerController extends Controller
     public function show(Request $request)
     {
         $owner = Owner::where('id', $request->id)->firstOrFail();
+        $dogs = Dog::where('owner_id', $owner->id)->get();
+
+        $dogs->each(function ($dog) {
+            $dog->is_up_to_date = $dog->isUpToDate();
+        });
 
         return Inertia::render('Owners/Profile', [
             'owner' => $owner,
-            'dogs' => Dog::where('owner_id', $owner->id)->get(),
+            'dogs' => $dogs,
+            'vaccines' => Vaccine::where('required', 1)->get(),
         ]);
     }
 

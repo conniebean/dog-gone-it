@@ -36,7 +36,7 @@ Route::prefix('owner')->group(function () {
 
 Route::prefix('dog')->group(function (){
     Route::get('index', DogController::class . '@index')->name('dog.index');
-    Route::post('store/{ownerId}', DogController::class . '@store')->name('dog.store');
+    Route::post('store', DogController::class . '@store')->name('dog.store');
 });
 
 Route::prefix('employee')->group(function() {
@@ -51,4 +51,6 @@ Route::prefix('appointments')->group(function(){
     Route::delete('delete/{appointment}', AppointmentController::class . '@delete')->name('appointment.delete');
     Route::patch('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
 });
+
+//need vaccines endpoint
 
