@@ -15,6 +15,12 @@ class DogController extends Controller
 {
     public function index()
     {
+        $dogs = Dog::query()->orderBy('name')->paginate(7);
+        return Inertia::render('Dogs/Index', [
+            'dogs' => $dogs->items(),
+            'lastPage' => $dogs->lastPage(),
+            'total' => $dogs->total(),
+        ]);
     }
 
     public function store(StoreDogRequest $request): DogResource

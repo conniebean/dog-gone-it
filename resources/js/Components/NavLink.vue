@@ -16,7 +16,7 @@
                         <!-- Sidebar content here -->
                         <li class="text-lg"><a>Dog Gone It</a></li>
                         <li><Link href="/api/owner/index">Owners</Link></li>
-                        <li><a>Dogs</a></li>
+                        <li><Link href="/api/dog/index">Dogs</Link></li>
                         <li><a>Reports</a></li>
                         <li><h2 class="menu-title">Appointment Types</h2>
                         <ul>

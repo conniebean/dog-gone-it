@@ -35,6 +35,7 @@ Route::prefix('owner')->group(function () {
 });
 
 Route::prefix('dog')->group(function (){
+    Route::get('index', DogController::class . '@index')->name('dog.index');
     Route::post('store/{ownerId}', DogController::class . '@store')->name('dog.store');
 });
 

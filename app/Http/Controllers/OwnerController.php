@@ -13,7 +13,7 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        $owners = Owner::query()->paginate(10);
+        $owners = Owner::query()->orderBy('name')->paginate(7);
         return Inertia::render('Owners/Index', [
             'owners' => $owners->items(),
             'lastPage' => $owners->lastPage(),
