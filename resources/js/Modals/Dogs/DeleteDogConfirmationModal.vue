@@ -50,7 +50,7 @@ const removeDog = function () {
         })
         .then(data => {
             if (!data.errors) {
-                Inertia.visit(`/api/owner/${props.owner.id}/profile`);
+                Inertia.visit(`/api/owner/${props.owner_id}/profile`);
                 // Inertia.reload({ only: ['dogs'] });
             }
             // Handle success case, data is the JSON object from the response
