@@ -10,17 +10,18 @@
                         <p class="text-gray-600"><strong>Phone:</strong> {{ owner.phone_number }}</p>
                         <p class="text-gray-600"><strong>Email:</strong> {{ owner.email }}</p>
                         <p class="text-gray-600"><strong>Address:</strong> {{ owner.address }}</p>
-                        <button @click="toggleModal"
+                        <button @click="toggleAddDogModal"
                                 class="mt-6 bg-gray-800 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">
                             Add Dog
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
-        <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
-            <add-dog-modal :owner_id="owner.id" :vaccines="vaccines"/>
+        <BaseModal :modalActive="addDogModalActive" @close-modal="toggleAddDogModal">
+            <add-dog-modal :owner_id="owner.id"/>
         </BaseModal>
+        </div>
+
         <div class="card glass rounded-lg shadow-md p-6">
             <h1 class="flex justify-center text-2xl text-black font-bold underline">Dogs</h1>
             <div class="card-body ">
@@ -36,18 +37,24 @@
                         </div>
                         <div class="card-actions justify-end">
                             <button
+                                @click="toggleRemoveDogModal"
                                 class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-full transition duration-150 ease-in-out">
                                 Remove
                             </button>
                             <button
+                                onClick="editDog"
                                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded-full transition duration-150 ease-in-out">
                                 Edit
                             </button>
                         </div>
                     </div>
+                    <BaseModal :modalActive="removeDogModalActive" @close-modal="toggleRemoveDogModal">
+                        <delete-dog-confirmation-modal :dog_id="dog.id" :owner_id="owner.id"/>
+                    </BaseModal>
                 </div>
             </div>
         </div>
+
     </div>
 
 </template>
@@ -58,29 +65,39 @@ import NavLink from "@/Components/NavLink.vue";
 import {defineProps, ref} from "vue";
 import BaseModal from "@/Modals/Appointments/BaseModal.vue";
 import AddDogModal from "@/Modals/Dogs/AddDogModal.vue";
+import {Inertia} from "@inertiajs/inertia";
+import DeleteDogConfirmationModal from "@/Modals/Dogs/DeleteDogConfirmationModal.vue";
 
 const props = defineProps({
     owner: {
         type: Object,
-        default: () => {
-        }
+        default: () => {}
     },
     dogs: {
         type: Object,
-        default: () => {
-        }
+        default: () => {}
     },
     vaccines: {
         type: Object,
-        default: () => {
-        }
+        default: () => {}
     }
 })
 
-const modalActive = ref(false);
-const toggleModal = function () {
-    return modalActive.value = !modalActive.value;
+const addDogModalActive = ref(false);
+const toggleAddDogModal = function () {
+    return addDogModalActive.value = !addDogModalActive.value;
 }
+
+const removeDogModalActive = ref(false);
+const toggleRemoveDogModal = function () {
+    return removeDogModalActive.value = !removeDogModalActive.value;
+}
+
+const editDog = function () {
+    //do stuff here
+}
+
+
 
 </script>
 

@@ -63,7 +63,6 @@ class OwnerController extends Controller
         return Inertia::render('Owners/Profile', [
             'owner' => $owner,
             'dogs' => $dogs,
-            'vaccines' => Vaccine::where('required', 1)->get(),
         ]);
     }
 

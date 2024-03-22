@@ -13,7 +13,6 @@
                 <div class="drawer-side">
                     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                     <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                        <!-- Sidebar content here -->
                         <li class="text-lg"><a>Dog Gone It</a></li>
                         <li><Link href="/api/owner/index">Owners</Link></li>
                         <li><Link href="/api/dog/index">Dogs</Link></li>

@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\BoardingController;
-use App\Http\Controllers\DaycareController;
 use App\Http\Controllers\DogController;
-use App\Http\Controllers\GroomingController;
+use App\Http\Controllers\DogVaccineController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -31,7 +29,7 @@ Route::prefix('owner')->group(function () {
     Route::post('search', OwnerController::class . '@search')->name('owner.search');
     Route::post('store', OwnerController::class . '@store')->name('owner.store');
     Route::delete('delete/{id}', OwnerController::class . '@delete')->name('owner.delete')->middleware(['admin', 'auth']);
-    Route::delete('{id}/dogs/{dogId}', DogController::class . '@delete')->name('dog.delete');
+    Route::delete('{ownerId}/dogs/{dogId}', DogController::class . '@delete')->name('dog.delete');
 });
 
 Route::prefix('dog')->group(function (){
@@ -52,5 +50,6 @@ Route::prefix('appointments')->group(function(){
     Route::patch('update/{appointment}', AppointmentController::class . '@update')->name('appointment.update');
 });
 
-//need vaccines endpoint
-
+Route::prefix('vaccine')->group(function(){
+    Route::post('store/{dogId}', DogVaccineController::class . '@store')->name('vaccine.store');
+});
