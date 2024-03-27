@@ -5,7 +5,7 @@
         <p>Owners</p>
     </div>
     <div class="flex justify-center pr-12">
-        <input type="text" placeholder="Search..">
+        <input type="text" placeholder="Search.." @click="debouncedSearch">
         <button class="btn ml-2">
             Search
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 512 512">
@@ -73,6 +73,35 @@ const props = defineProps({
         type: Number
     }
 })
+
+const searchTerm = ref('');
+
+let debounceTimer;
+const debounce = (func, delay = 500) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(func, delay);
+};
+
+const fetchOwners = async () => {
+    try {
+        const response = await fetch(`/api/owner/search`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({name: searchTerm.value}),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        dogs.value = data;
+    } catch (error) {
+        console.error('Error fetching owners:', error);
+    }
+};
+
+const debouncedSearch = () => debounce(fetchOwners, 500);
 
 const currentPage = ref(1);
 const lastPage = props.lastPage

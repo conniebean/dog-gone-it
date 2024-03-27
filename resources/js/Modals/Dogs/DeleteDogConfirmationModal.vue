@@ -1,8 +1,14 @@
 
 <template>
-<!--    okay here is where my brain shat, we need to click a confirm button that deletes the dogoo
-or we need to cancel which doesn't delete the dog meenss is  so cute-->
- <h1>haaaaaaaay {{props.dog_id}}</h1>
+ <p class="font-bold text-xl">Are you sure you wish to delete this dog?</p>
+    <div class="mt-4">
+        <button
+            class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded w-full shadow-lg"
+            @click="removeDog"
+        >
+            Yes
+        </button>
+    </div>
 </template>
 
 <script setup>
@@ -20,7 +26,7 @@ const props = defineProps({
 
 const removeDog = function () {
 
-    fetch(`/api/owner/` + props.owner_id+ `/dogs/` + props.dog_id, {
+    fetch(`/api/dog/${props.dog_id}/owner/${props.owner_id}`, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
@@ -28,35 +34,27 @@ const removeDog = function () {
         },
     })
         .then(response => {
-            // Check if the response was ok (status in the range 200-299)
             if (!response.ok) {
-                // If the server response was not ok, handle 422 or other errors
                 if (response.status === 422) {
-                    // Parse JSON to get the actual validation errors
                     return response.json().then(data => {
                         let messages = Object.values(data.errors).map((msgs) => msgs.join(', ')).join('. ');
                         errors.value.message = messages;
-                        console.log(errors.value.message); // Log or handle errors
+                        console.log(errors.value.message);
 
-                        throw new Error('Validation failed'); // Prevent further processing
+                        throw new Error('Validation failed');
                     });
                 } else {
-                    // Handle other errors
                     throw new Error('Some error occurred');
                 }
             }
-            // If response was ok, parse it as JSON and proceed
             return response.json();
         })
         .then(data => {
             if (!data.errors) {
                 Inertia.visit(`/api/owner/${props.owner_id}/profile`);
-                // Inertia.reload({ only: ['dogs'] });
             }
-            // Handle success case, data is the JSON object from the response
         })
         .catch(error => {
-            // Catch block for network errors or errors thrown from then blocks
             console.error('Fetch error:', error.message);
         });
 }

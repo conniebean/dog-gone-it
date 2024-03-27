@@ -60,7 +60,7 @@ const debounce = (func, delay = 500) => {
 
 const fetchOwners = async () => {
     try {
-        const response = await fetch(`/api/owner/search`, {
+        const response = await fetch(`/api/owner/searchDogs`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
