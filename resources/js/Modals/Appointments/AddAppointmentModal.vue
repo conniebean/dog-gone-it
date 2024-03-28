@@ -94,7 +94,6 @@ const errors = ref({
 
 const appointment = ref({
     dog_id: '',
-    //todo: this obv needs to change
     facility_id: 1,
     appointmentable_id: 1,
     appointmentable_type: props.appointment_type,
@@ -122,29 +121,24 @@ const addAppointment = () => {
         method: 'POST',
         body: JSON.stringify(apptStuff),
         headers: {
-            'Accept': 'application/json', // Ensure Laravel returns a JSON response
+            'Accept': 'application/json',
             'Content-type': 'application/json',
         },
     })
         .then(response => {
-            // Check if the response was ok (status in the range 200-299)
             if (!response.ok) {
-                // If the server response was not ok, handle 422 or other errors
                 if (response.status === 422) {
-                    // Parse JSON to get the actual validation errors
                     return response.json().then(data => {
                         let messages = Object.values(data.errors).map((msgs) => msgs.join(', ')).join('. ');
                         errors.value.message = messages;
-                        console.log(errors.value.message); // Log or handle errors
+                        console.log(errors.value.message);
 
-                        throw new Error('Validation failed'); // Prevent further processing
+                        throw new Error('Validation failed');
                     });
                 } else {
-                    // Handle other errors
                     throw new Error('Some error occurred');
                 }
             }
-            // If response was ok, parse it as JSON and proceed
             return response.json();
         })
         .then(data => {
@@ -152,10 +146,8 @@ const addAppointment = () => {
                 const appointmentableType = getAppointmentableType(appointment.value);
                 Inertia.visit(`/appointments/${appointmentableType}/index`);
             }
-            // Handle success case, data is the JSON object from the response
         })
         .catch(error => {
-            // Catch block for network errors or errors thrown from then blocks
             console.error('Fetch error:', error.message);
         });
 }
