@@ -4,19 +4,19 @@
             <h3>Enter Vaccine Info</h3>
         </div>
         <form method="post" @submit.prevent="addVaccines" class="flex flex-col justify-between h-full">
-                <div v-for="vaccine in vaccines" :key="vaccine.id" class="mb-2">
-                    <label>{{ vaccine.name }}</label>
-                    <input
-                        type="date"
-                        v-model="vaccineExpiryDates[vaccine.id]"
-                    >
-                </div>
+            <div v-for="vaccine in vaccines" :key="vaccine.id" class="mb-2">
+                <label class="block mb-2">{{ vaccine.name }}</label>
+                <input
+                    type="date"
+                    v-model="vaccineExpiryDates[vaccine.id]"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+            </div>
             <div class="mt-4">
                 <button class="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded w-full shadow-lg">
                     Submit
                 </button>
             </div>
-
         </form>
     </div>
 </template>

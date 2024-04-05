@@ -7,7 +7,7 @@
         <div class="flex">
             <div class="flex-grow">
                 <div
-                    class="w-1/5 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
+                    class="w-1/5 flex mx-auto my-3 justify-center bg-secondary text-white font-bold p-4 rounded">
                     <p>{{ availableSpots }} Available spots</p>
                 </div>
                 <table class="table table-lg bg-base-200 table-zebra-zebra table-pin-rows table-pin-cols justify-items-center">
@@ -24,7 +24,7 @@
     </div>
     <div class="flex justify-end pr-12 py-2">
         <button @click="toggleModal"
-                class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
+                class="bg-secondary hover:bg-secondary-500 text-white font-bold py-2 px-4 rounded">
             Add Appointment
         </button>
         <BaseModal :modalActive="modalActive" @close-modal="toggleModal">

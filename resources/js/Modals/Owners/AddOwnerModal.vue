@@ -15,7 +15,7 @@
             <div class="mb-4">
                 <input type="text"
                        class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                       v-model="owner.address" placeholder="address: 420 long grass blv">
+                       v-model="owner.address" placeholder="address: 123 Fake Street">
             </div>
             <div class="mb-4">
                 <input type="tel"

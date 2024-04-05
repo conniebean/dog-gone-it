@@ -39,7 +39,7 @@
     </td>
     <td>
         <button @click="toggleModal"
-                class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">
+                class="bg-secondary hover:bg-secondary-500 text-white font-bold py-2 px-4 rounded">
             View Owner
         </button>
 

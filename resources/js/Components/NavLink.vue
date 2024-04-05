@@ -1,14 +1,14 @@
 <template>
-    <div class="navbar bg-base-100">
+    <div class="navbar bg-base-200">
         <div class="navbar-start">
             <div class="drawer z-10">
                 <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                 <div class="drawer-content flex">
 
-                    <label for="my-drawer" class="btn drawer-button h-full">
+                    <label for="my-drawer" class="btn drawer-button h-full bg-base-300">
                         <SideBar/>
                     </label>
-                    <h2 class="mt-2 ml-2 font-bold text-lg">Dog Gone It</h2>
+                    <h2 class="mt-2 ml-2 font-bold text-xl">Dog Gone It</h2>
                 </div>
                 <div class="drawer-side">
                     <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
@@ -16,7 +16,6 @@
                         <li class="text-lg"><a>Dog Gone It</a></li>
                         <li><Link href="/api/owner/index">Owners</Link></li>
                         <li><Link href="/api/dog/index">Dogs</Link></li>
-                        <li><a>Reports</a></li>
                         <li><h2 class="menu-title">Appointment Types</h2>
                         <ul>
                             <li>
@@ -62,8 +61,7 @@
             </ul>
         </div>
         <div class="navbar-end">
-            <a class="btn btn-sm mr-4">Log Out</a>
-            <a class="btn btn-sm mr-4">Switch User</a>
+            <a class="btn btn-sm mr-4 bg-base-300">Log Out</a>
         </div>
     </div>
 </template>

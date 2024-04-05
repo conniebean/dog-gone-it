@@ -2,7 +2,7 @@
     <NavLink/>
     <div class="overflow-x-auto px-12">
         <div class="mx-auto">
-            <div class=" w-1/5 flex mx-auto my-3 justify-center bg-secondary text-base-100 font-bold p-4 rounded">
+            <div class=" w-1/5 flex mx-auto my-3 justify-center bg-secondary text-white font-bold p-4 rounded">
                 <p>{{ availableSpots }} Available spots</p>
             </div>
         </div>
@@ -17,7 +17,7 @@
     </div>
     <div class="flex justify-end pr-12 py-2">
         <button @click="toggleModal"
-                class="bg-secondary hover:bg-secondary-500 text-base-100 font-bold py-2 px-4 rounded">Add
+                class="bg-secondary hover:bg-secondary-500 text-white font-bold py-2 px-4 rounded">Add
             Appointment
         </button>
         <BaseModal :modalActive="modalActive" @close-modal="toggleModal">

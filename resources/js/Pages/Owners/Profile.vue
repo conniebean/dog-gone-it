@@ -40,14 +40,14 @@
             <h1 class="flex justify-center text-2xl text-black font-bold underline">Dogs</h1>
             <div class="card-body ">
                 <div v-for="dog in dogs" :key="dog.id">
-                    <h2 class="text-2xl font-bold text-gray-700 mb-2">{{ dog.name }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ dog.name }}</h2>
                     <div class="flex justify-between items-center mb-2">
                         <div class="text-xl">
-                            <p class=" text-gray-600"><strong>Breed:</strong> {{ dog.breed }}</p>
-                            <p class=" text-gray-600"><strong>Gender:</strong> {{ dog.sex }}</p>
-                            <p class=" text-gray-600"><strong>DOB:</strong> {{ dog.date_of_birth }}</p>
-                            <p class=" text-gray-600"><strong>Fixed:</strong> {{ dog.fixed ? 'Yes' : 'No' }}</p>
-                            <p class=" text-gray-600"><strong>Vaccines UTD:</strong> {{ dog.is_up_to_date }}</p>
+                            <p class=" text-gray-800"><strong>Breed:</strong> {{ dog.breed }}</p>
+                            <p class=" text-gray-800"><strong>Gender:</strong> {{ dog.sex }}</p>
+                            <p class=" text-gray-800"><strong>DOB:</strong> {{ dog.date_of_birth }}</p>
+                            <p class=" text-gray-800"><strong>Fixed:</strong> {{ dog.fixed ? 'Yes' : 'No' }}</p>
+                            <p class=" text-gray-800"><strong>Vaccines UTD:</strong> {{ dog.is_up_to_date }}</p>
                         </div>
                         <div class="card-actions justify-end">
                             <button
