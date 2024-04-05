@@ -28,9 +28,7 @@ class DogController extends Controller
 
     public function show()
     {
-        return Inertia::render('Dogs/Index', [
-            'dogs' => Dog::all()
-        ]);
+        //
     }
 
     public function edit(Dog $dog)
