@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Owner\StoreOwnerRequest;
+use App\Http\Requests\Owner\UpdateOwnerRequest;
 use App\Http\Resources\OwnerResource;
 use App\Models\Dog;
 use App\Models\Owner;
+use App\Models\Vaccine;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -36,12 +38,24 @@ class OwnerController extends Controller
 
     public function search(Request $request)
     {
+        if ($request->name) {
+            $owners = Owner::where('name', 'like', '%' . $request->name . '%')->get();
+            return $owners;
+
+        }
+        else{
+            return Owner::all();
+        }
+    }
+
+    public function searchDogs(Request $request)
+    {
         $dogs = [];
         if ($request->name) {
             $owners = Owner::where('name', 'like', '%' . $request->name . '%')->with('dogs')->get();
             $dogs = $owners->flatMap->dogs;
             $dogs->each(function ($d) {
-               return $d->name;
+                return $d->name;
             });
         } else {
             $dogs = Dog::all();
@@ -53,10 +67,16 @@ class OwnerController extends Controller
     public function show(Request $request)
     {
         $owner = Owner::where('id', $request->id)->firstOrFail();
+        $dogs = Dog::where('owner_id', $owner->id)->get();
+
+        $dogs->each(function ($dog) {
+            $dog->is_up_to_date = $dog->isUpToDate();
+        });
 
         return Inertia::render('Owners/Profile', [
             'owner' => $owner,
-            'dogs' => Dog::where('owner_id', $owner->id)->get(),
+            'dogs' => $dogs,
+            'vaccines' => Vaccine::where('required', 1)->get(),
         ]);
     }
 
@@ -65,12 +85,12 @@ class OwnerController extends Controller
         //
     }
 
-    public function update(Request $request, Owner $owner)
+    public function update(UpdateOwnerRequest $request, $id)
     {
-        //
+        return Owner::findOrFail($id)->update($request->validated());
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $record = Owner::find($id);
         $record->delete();

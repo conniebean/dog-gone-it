@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Dog\StoreDogRequest;
+use App\Http\Requests\Dog\UpdateDogRequest;
 use App\Http\Resources\DogResource;
 use App\Models\Dog;
 use App\Models\Owner;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 use Inertia\Inertia;
 
 class DogController extends Controller
@@ -30,9 +28,7 @@ class DogController extends Controller
 
     public function show()
     {
-        return Inertia::render('Dogs/Index', [
-            'dogs' => Dog::all()
-        ]);
+        //
     }
 
     public function edit(Dog $dog)
@@ -40,16 +36,16 @@ class DogController extends Controller
         //
     }
 
-    public function update(Request $request, Dog $dog)
+    public function update(UpdateDogRequest $request, $dogId, $ownerId)
     {
-        //
+        return Dog::findOrFail($dogId)->where('owner_id', $ownerId)->update($request->validated());
     }
 
-    public function delete($ownerId, $dogId)
+    public function delete($dogId, $ownerId)
     {
         $owner = Owner::findOrFail($ownerId);
         $dog = $owner->dogs()->findOrFail($dogId);
 
-        $dog->delete();
+        return response()->json($dog->delete());
     }
 }

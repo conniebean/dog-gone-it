@@ -1,28 +1,28 @@
 <template>
     <div>
         <div class="flex justify-center pb-4 font-bold text-black">
-            <h3>Add A Dog</h3>
+            <h3>Edit Dog</h3>
         </div>
-        <form method="post" @submit.prevent="addDog" class="flex flex-col justify-between h-full">
+        <form method="post" @submit.prevent="editDog" class="flex flex-col justify-between h-full">
             <div class="mb-2">
                 <input type="text"
                        class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                       v-model="dog.name" placeholder="Scruffy">
+                       v-model="props.dog.name">
             </div>
             <div class="mb-2">
                 <input type="date"
                        class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                       v-model="dog.date_of_birth">
+                       v-model="props.dog.date_of_birth">
             </div>
             <div class="mb-2">
                 <input type="text"
                        class="mt-4 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                       v-model="dog.breed" placeholder="Dutch Shepherd">
+                       v-model="props.dog.breed" placeholder="Dutch Shepherd">
             </div>
             <div class="mb-2">
                 <select
                     class="mt-8 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
-                    v-model="dog.sex">
+                    v-model="props.dog.sex">
                     <option class="text-black-50" value="" disabled selected>Select A Sex</option>
                     <option class="text-black" value="male">Male</option>
                     <option class="text-black" value="female">Female</option>
@@ -31,7 +31,7 @@
             <div class="mb-2">
                 <select
                     class="mt-8 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-black"
-                    v-model="dog.fixed">
+                    v-model="props.dog.fixed">
                     <option class="text-black-50" value="" disabled selected>Is Your Dog Fixed?</option>
                     <option class="text-black" value="0">No</option>
                     <option class="text-black" value="1">Yes</option>
@@ -57,33 +57,27 @@ const props = defineProps({
     owner_id:{
         type: Number
     },
+    dog:{
+        type: Object
+    }
 });
 
 const errors = ref({
     message: ''
 });
 
-const dog = ref({
-    owner_id: '',
-    name: '',
-    date_of_birth: '',
-    breed: '',
-    sex: '',
-    fixed: ''
-});
-
-const addDog = () => {
-    const newDog = {
+const editDog = () => {
+    const editDog = {
         owner_id: props.owner_id,
-        name: dog.value.name,
-        date_of_birth: dog.value.date_of_birth,
-        breed: dog.value.breed,
-        sex: dog.value.sex,
-        fixed: dog.value.fixed
+        name: props.dog.name,
+        date_of_birth: props.dog.date_of_birth,
+        breed: props.dog.breed,
+        sex: props.dog.sex,
+        fixed: props.dog.fixed
     }
-    fetch(`/api/dog/store`, {
-        method: 'POST',
-        body: JSON.stringify(newDog),
+    fetch(`/api/dog/${props.dog.id}/owner/${props.owner_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(editDog),
         headers: {
             'Accept': 'application/json',
             'Content-type': 'application/json',
@@ -95,9 +89,9 @@ const addDog = () => {
                     return response.json().then(data => {
                         let messages = Object.values(data.errors).map((msgs) => msgs.join(', ')).join('. ');
                         errors.value.message = messages;
-                        console.log(errors.value.message); // Log or handle errors
+                        console.log(errors.value.message);
 
-                        throw new Error('Validation failed'); // Prevent further processing
+                        throw new Error('Validation failed');
                     });
                 } else {
                     throw new Error('Some error occurred');

@@ -12,6 +12,8 @@ class DogVaccine extends Model
 
     protected $table = 'dog_vaccine';
 
+    protected $guarded = [];
+
     public function dog(): BelongsTo
     {
         return $this->belongsTo(Dog::class, 'dog_id', 'id');
